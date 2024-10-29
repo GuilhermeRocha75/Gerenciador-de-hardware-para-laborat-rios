@@ -137,3 +137,83 @@ O sistema gerenciará:
 ### **5. Considerações Finais**
 
 O sistema "Gerenciador de Hardware para Laboratórios" deve facilitar o controle e o monitoramento das máquinas e peças de hardware, proporcionando maior eficiência na gestão de manutenção e inventário dos laboratórios. Este documento deverá ser revisado periodicamente conforme novas funcionalidades e necessidades sejam identificadas.
+
+---
+
+## CODIGO MYSQL:
+
+```sql
+create database GerenciadorDeHardware;
+use GerenciadorDeHardware;
+
+-- Tabela laboratorios
+CREATE TABLE laboratorios (
+    id_laboratorio INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(100) NOT NULL,
+    localizacao VARCHAR(255)
+);
+
+-- Tabela maquinas
+CREATE TABLE maquinas (
+    id_maquina INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(100) NOT NULL,
+    id_laboratorio INT,
+    cpu VARCHAR(100),
+    ram VARCHAR(50),
+    armazenamento VARCHAR(50),
+    status ENUM('funcionando', 'em manutencao', 'fora de uso') DEFAULT 'funcionando',
+    data_aquisicao DATE,
+    FOREIGN KEY (id_laboratorio) REFERENCES laboratorios(id_laboratorio)
+);
+
+-- Tabela pecas
+CREATE TABLE pecas (
+    id_peca INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(100) NOT NULL,
+    tipo VARCHAR(50),
+    fabricante VARCHAR(100),
+    quantidade INT DEFAULT 0
+);
+
+-- Tabela manutencoes
+CREATE TABLE manutencoes (
+    id_manutencao INT PRIMARY KEY AUTO_INCREMENT,
+    id_maquina INT,
+    tipo ENUM('preventiva', 'corretiva') NOT NULL,
+    data_manutencao DATE NOT NULL,
+    descricao TEXT,
+    status ENUM('agendada', 'concluida', 'cancelada') DEFAULT 'agendada',
+    FOREIGN KEY (id_maquina) REFERENCES maquinas(id_maquina)
+);
+
+-- Tabela pecas_manutencao (associação entre pecas e manutencoes)
+CREATE TABLE pecas_manutencao (
+    id_peca_manutencao INT PRIMARY KEY AUTO_INCREMENT,
+    id_manutencao INT,
+    id_peca INT,
+    quantidade INT DEFAULT 1,
+    FOREIGN KEY (id_manutencao) REFERENCES manutencoes(id_manutencao),
+    FOREIGN KEY (id_peca) REFERENCES pecas(id_peca)
+);
+
+-- Tabela usuarios
+CREATE TABLE usuarios (
+    id_usuario INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    senha VARCHAR(255) NOT NULL,
+    perfil ENUM('tecnico', 'administrador') DEFAULT 'tecnico',
+    data_cadastro DATE DEFAULT (NOW())
+);
+
+-- Tabela logs_acoes
+CREATE TABLE logs_acoes (
+    id_log INT PRIMARY KEY AUTO_INCREMENT,
+    id_usuario INT,
+    acao VARCHAR(255) NOT NULL,
+    data_hora DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario)
+);
+
+
+```
