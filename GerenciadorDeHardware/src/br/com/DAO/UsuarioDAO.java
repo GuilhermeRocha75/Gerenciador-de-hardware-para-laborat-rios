@@ -19,7 +19,7 @@ public class UsuarioDAO {
     
     // Método para verificar login
     public boolean logar(String login, String senha) {
-        String sql = "SELECT * FROM usuarios WHERE usuario = ? AND senha = ?";
+        String sql = "SELECT * FROM usuarios WHERE nome = ? AND senha = ?";
         conexao = new ConexaoDAO().conector(); // Conecta ao banco de dados
 
         try {
@@ -91,16 +91,16 @@ public class UsuarioDAO {
     
     //Metodo inserir/adicionar usuarios
     public void inserirUsuario(UsuarioDTO objUsuarioDTO){
-        String sql = "insert into usuarios(id_usuario, nome, email, senha, perfil, data_cadastro) values(?, ?, ?, ?, ?, ?, ?)";
+        String sql = "insert into usuarios(id_usuario, nome, email, senha, perfil, data_cadastro) values(?, ?, ?, ?, ?, ?)";
         conexao = new ConexaoDAO().conector();
         
         try {
             pst = conexao.prepareStatement(sql);
             pst.setInt(1, objUsuarioDTO.getIdUsuario());
             pst.setString(2, objUsuarioDTO.getNomeUsuario());
-            pst.setString(3, objUsuarioDTO.getPerfilUsuario());
-            pst.setString(4, objUsuarioDTO.getEmailUsuario());
-            pst.setString(5, objUsuarioDTO.getSenhaUsuario());
+            pst.setString(3, objUsuarioDTO.getEmailUsuario());
+            pst.setString(4, objUsuarioDTO.getSenhaUsuario());
+            pst.setString(5, objUsuarioDTO.getPerfilUsuario()); 
             pst.setString(6, objUsuarioDTO.getDataCadastro());
           
             

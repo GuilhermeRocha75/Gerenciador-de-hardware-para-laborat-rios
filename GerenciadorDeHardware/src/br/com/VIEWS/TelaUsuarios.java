@@ -92,7 +92,6 @@ public class TelaUsuarios extends javax.swing.JInternalFrame {
         txtNomeUsuario = new javax.swing.JTextField();
         lblEndereco = new javax.swing.JLabel();
         lblTelefone = new javax.swing.JLabel();
-        txtPerfil = new javax.swing.JTextField();
         txtSenha = new javax.swing.JTextField();
         btnEditar = new javax.swing.JButton();
         lblEmail = new javax.swing.JLabel();
@@ -100,6 +99,7 @@ public class TelaUsuarios extends javax.swing.JInternalFrame {
         lblCpf = new javax.swing.JLabel();
         txtData = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
+        jComboBox1 = new javax.swing.JComboBox<>();
 
         setClosable(true);
 
@@ -153,9 +153,9 @@ public class TelaUsuarios extends javax.swing.JInternalFrame {
         lblTelefone.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         lblTelefone.setText("Senha:");
 
-        txtPerfil.addActionListener(new java.awt.event.ActionListener() {
+        txtSenha.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtPerfilActionPerformed(evt);
+                txtSenhaActionPerformed(evt);
             }
         });
 
@@ -181,6 +181,13 @@ public class TelaUsuarios extends javax.swing.JInternalFrame {
 
         jLabel3.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
         jLabel3.setText("Cadastro de usuário:");
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "tecnico", "estagiario", "professor", "administrador" }));
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -221,11 +228,11 @@ public class TelaUsuarios extends javax.swing.JInternalFrame {
                                             .addComponent(lblEndereco)
                                             .addComponent(lblTelefone)
                                             .addComponent(jLabel2))
-                                        .addGap(18, 18, 18)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(txtPerfil)
                                             .addComponent(txtNomeUsuario)
-                                            .addComponent(txtSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 308, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                            .addComponent(txtSenha, javax.swing.GroupLayout.DEFAULT_SIZE, 308, Short.MAX_VALUE)
+                                            .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(45, 45, 45)
                                 .addComponent(jLabel1)
@@ -253,8 +260,8 @@ public class TelaUsuarios extends javax.swing.JInternalFrame {
                     .addComponent(txtNomeUsuario, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtPerfil)
-                    .addComponent(lblEndereco))
+                    .addComponent(lblEndereco)
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -285,44 +292,46 @@ public class TelaUsuarios extends javax.swing.JInternalFrame {
     private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
           //metodo botao limpar
           
-      ClienteDAO objClienteDAO = new ClienteDAO();       
-            objClienteDAO.limpar();
-
+  
+            UsuarioDAO objUsuarioDAO = new UsuarioDAO();
+            objUsuarioDAO.limpar();
+            
+            
     }//GEN-LAST:event_btnLimparActionPerformed
 
     private void btnIncluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIncluirActionPerformed
         // TODO add your handling code here:
      // Verifique se qualquer um dos campos obrigatórios está vazio
-if (txtIdUsuario.getText().trim().isEmpty() || txtPerfil.getText().trim().isEmpty() || txtNomeUsuario.getText().trim().isEmpty() || txtSenha.getText().trim().isEmpty() || txtEmail.getText().trim().isEmpty() || txtData.getText().trim().isEmpty()) {
+if (txtIdUsuario.getText().trim().isEmpty() || txtPerfil.getText().trim().isEmpty() || txtNomeUsuario.getText().trim().isEmpty() || txtSenha.getText().trim().isEmpty() || txtEmail.getText().trim().isEmpty()) {
     // Exibe mensagem de erro se qualquer um dos campos estiver vazio
     JOptionPane.showMessageDialog(null, "Preencha todos os campos!", "Erro", JOptionPane.ERROR_MESSAGE);
 } else {
     // Captura de dados na tela Usuario
     int id_Usuario = Integer.parseInt(txtIdUsuario.getText());
-    String nome_cliente = txtNomeUsuario.getText();
-    String endereco_cliente = txtPerfil.getText();
-    String telefone_cliente = txtSenha.getText();
-    String email_cliente = txtEmail.getText();
-    String cpf_cliente = txtData.getText();
+    String nome_usuario = txtNomeUsuario.getText();
+    String perfil_usuario = txtPerfil.getText();
+    String senha_usuario = txtSenha.getText();
+    String email_usuario = txtEmail.getText();
+    String data_usuario = txtData.getText();
     
-    ClienteDAO objClienteDAO = new ClienteDAO();
+
+    UsuarioDAO objUsuarioDAO = new UsuarioDAO();
 
     // Verifica se o id ou login já existem
-    if (objClienteDAO.verificarUsuarioExistente(id_Usuario, cpf_cliente)) {
-        JOptionPane.showMessageDialog(null, "O ID ou CPF/CNPJ já estão cadastrados!", "Erro", JOptionPane.ERROR_MESSAGE);
+    if (objUsuarioDAO.verificarUsuarioExistente(id_Usuario)) {
+        JOptionPane.showMessageDialog(null, "O ID já está cadastrado!", "Erro", JOptionPane.ERROR_MESSAGE);
     } else {
         // Se não existir, insere o novo cliente
-        ClienteDTO objClienteDTO = new ClienteDTO();
-        objClienteDTO.setIdCliente(id_Usuario);
-        objClienteDTO.setNomeCliente(nome_cliente);
-        objClienteDTO.setEnderecoCliente(endereco_cliente);
-        objClienteDTO.setTelefone(telefone_cliente);
-        objClienteDTO.setEmail(email_cliente);
-        objClienteDTO.setCpf(cpf_cliente);
         
+        UsuarioDTO objUsuarioDTO = new UsuarioDTO();
+        objUsuarioDTO.setNomeUsuario(nome_usuario);
+        objUsuarioDTO.setPerfilUsuario(perfil_usuario);
+        objUsuarioDTO.setSenhaUsuario(senha_usuario);
+        objUsuarioDTO.setEmailUsuario(email_usuario);
+        objUsuarioDTO.setDataCadastro(data_usuario);
 
-        objClienteDAO.inserirUsuario(objClienteDTO);
-        JOptionPane.showMessageDialog(null, "Cliente cadastrado com sucesso!");
+        objUsuarioDAO.inserirUsuario(objUsuarioDTO);
+        JOptionPane.showMessageDialog(null, "Usuário cadastrado com sucesso!");
     }
 }
 
@@ -334,29 +343,28 @@ if (txtIdUsuario.getText().trim().isEmpty() || txtPerfil.getText().trim().isEmpt
      // Chamada do método Pesquisar
 
 // Obtém o ID do campo de texto
-int idCliente = Integer.parseInt(txtIdUsuario.getText());
+int idUsuario = Integer.parseInt(txtIdUsuario.getText());
 
 // Cria uma instância do DAO
-ClienteDAO clienteDAO = new ClienteDAO();
-
+UsuarioDAO usuarioDAO = new UsuarioDAO();
 // Chama o método pesquisar e obtém o resultado
 
-    ClienteDTO clienteDTO = clienteDAO.pesquisarUsuario(idCliente);
+    UsuarioDTO usuarioDTO = usuarioDAO.pesquisarUsuario(idUsuario);
 
-if (clienteDTO != null) {
+if (usuarioDTO != null) {
     // Preenche os campos com os dados do cliente encontrado
-    txtNomeUsuario.setText(clienteDTO.getNomeCliente());
-    txtPerfil.setText(clienteDTO.getEnderecoCliente());
-    txtSenha.setText(clienteDTO.getTelefone());
-    txtEmail.setText(clienteDTO.getEmail());
-    txtData.setText(clienteDTO.getCpf());
+    txtNomeUsuario.setText(usuarioDTO.getNomeUsuario());
+    txtPerfil.setText(usuarioDTO.getPerfilUsuario());
+    txtSenha.setText(usuarioDTO.getSenhaUsuario());
+    txtEmail.setText(usuarioDTO.getEmailUsuario());
+    txtData.setText(usuarioDTO.getDataCadastro());
 } else {
     // Mostra uma mensagem de erro se o cliente não for encontrado
-    JOptionPane.showMessageDialog(null, "Cliente não cadastrado!");
+    JOptionPane.showMessageDialog(null, "Usuário não cadastrado!");
 
     // Método para apagar os campos
-    ClienteDAO objClienteDAO = new ClienteDAO();       
-    objClienteDAO.limpar();
+    UsuarioDAO objUsuarioDAO = new UsuarioDAO();
+    objUsuarioDAO.limpar();
 }
 
     }//GEN-LAST:event_btnPesquisarActionPerformed
@@ -364,10 +372,6 @@ if (clienteDTO != null) {
     private void txtIdUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdUsuarioActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtIdUsuarioActionPerformed
-
-    private void txtPerfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPerfilActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtPerfilActionPerformed
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
 // TODO add your handling code here:
@@ -416,6 +420,14 @@ objClienteDAO.editar(objClienteDTO);
         // TODO add your handling code here:
     }//GEN-LAST:event_txtDataActionPerformed
 
+    private void txtSenhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSenhaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSenhaActionPerformed
+
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBox1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEditar;
@@ -423,6 +435,7 @@ objClienteDAO.editar(objClienteDTO);
     private javax.swing.JButton btnIncluir;
     private javax.swing.JButton btnLimpar;
     private javax.swing.JButton btnPesquisar;
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -434,7 +447,6 @@ objClienteDAO.editar(objClienteDTO);
     public static javax.swing.JTextField txtEmail;
     public static javax.swing.JTextField txtIdUsuario;
     public static javax.swing.JTextField txtNomeUsuario;
-    public static javax.swing.JTextField txtPerfil;
     public static javax.swing.JTextField txtSenha;
     // End of variables declaration//GEN-END:variables
 }
