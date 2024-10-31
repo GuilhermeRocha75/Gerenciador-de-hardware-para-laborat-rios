@@ -37,9 +37,11 @@ public class TelaPrincipal extends javax.swing.JFrame {
         submenuClientes = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
+        jMenuItem4 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
+        jMenuItem5 = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -151,20 +153,37 @@ public class TelaPrincipal extends javax.swing.JFrame {
         });
         subMenuUsuarios.add(jMenuItem2);
 
-        jMenuItem3.setText("Manutenções");
-        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItem4.setText("Peças");
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem3ActionPerformed(evt);
+                jMenuItem4ActionPerformed(evt);
             }
         });
-        subMenuUsuarios.add(jMenuItem3);
+        subMenuUsuarios.add(jMenuItem4);
 
         MenuRel.add(subMenuUsuarios);
 
         jMenu3.setText("Relatorio");
         MenuRel.add(jMenu3);
 
-        jMenu2.setText("Ajuda");
+        jMenu2.setText("Manutenções");
+
+        jMenuItem5.setText("Máquinas em manutenção");
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem5);
+
+        jMenuItem3.setText("Peças em manutenção");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem3);
+
         MenuRel.add(jMenu2);
 
         jMenu4.setText("Opções");
@@ -193,7 +212,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
     private void submenuUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submenuUsuariosActionPerformed
         //chamar tela usuario
-        TelaUsuarios tUsuario = new TelaUsuarios();
+        TelaMáquinas tUsuario = new TelaMáquinas();
         tUsuario.setVisible(true);
          DesktopPrincipal.add(tUsuario);
         // TODO add your handling code here:
@@ -201,7 +220,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
     private void submenuClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submenuClientesActionPerformed
         //chamar tela cliente
-        TelaCliente tCliente = new TelaCliente();
+        TelaUsuarios tCliente = new TelaUsuarios();
         tCliente.setVisible(true);
         DesktopPrincipal.add(tCliente);
     }//GEN-LAST:event_submenuClientesActionPerformed
@@ -222,6 +241,14 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
+
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
         // TODO add your handling code here:
@@ -273,6 +300,8 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JScrollPane jScrollPane1;
     public static javax.swing.JMenu subMenuUsuarios;
     private javax.swing.JMenuItem submenuClientes;

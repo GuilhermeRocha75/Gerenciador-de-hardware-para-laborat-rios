@@ -215,5 +215,15 @@ CREATE TABLE logs_acoes (
     FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario)
 );
 
+-- atualizações tabelas
+ALTER TABLE manutencoes
+ADD COLUMN responsavel VARCHAR(100) NOT NULL;
+
+ALTER TABLE maquinas
+DROP COLUMN data_aquisicao;
+
+
+
+
 
 ```

@@ -3,9 +3,9 @@ package br.com.DAO;
 
 import br.com.DTO.ClienteDTO;
 import br.com.DTO.UsuarioDTO;
-import br.com.VIEWS.TelaCliente;
-import br.com.VIEWS.TelaPrincipal;
 import br.com.VIEWS.TelaUsuarios;
+import br.com.VIEWS.TelaPrincipal;
+import br.com.VIEWS.TelaMáquinas;
 import java.awt.Color;
 import java.sql.*;
 import javax.swing.JOptionPane;
@@ -47,12 +47,12 @@ public class ClienteDAO {
    
    
 public void limpar() {
-    TelaCliente.txtIdUsuario.setText(null);
-    TelaCliente.txtNomeUsuario.setText(null);
-    TelaCliente.txtTelefone.setText(null);
-    TelaCliente.txtEndereco.setText(null);
-    TelaCliente.txtEmail.setText(null);
-    TelaCliente.txtCpf.setText(null);
+    TelaUsuarios.txtIdUsuario.setText(null);
+    TelaUsuarios.txtNomeUsuario.setText(null);
+    TelaUsuarios.txtSenha.setText(null);
+    TelaUsuarios.txtPerfil.setText(null);
+    TelaUsuarios.txtEmail.setText(null);
+
 }
 
     
