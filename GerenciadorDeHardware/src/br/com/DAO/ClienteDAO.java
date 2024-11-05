@@ -45,15 +45,15 @@ public class ClienteDAO {
     }
    
    
-   
 public void limpar() {
     TelaUsuarios.txtIdUsuario.setText(null);
     TelaUsuarios.txtNomeUsuario.setText(null);
+    TelaUsuarios.boxPerfil.setSelectedIndex(-1);  // Limpa a seleção da JComboBox
     TelaUsuarios.txtSenha.setText(null);
-    TelaUsuarios.txtPerfil.setText(null);
     TelaUsuarios.txtEmail.setText(null);
-
+    TelaUsuarios.txtData.setText(null);
 }
+
 
     
     

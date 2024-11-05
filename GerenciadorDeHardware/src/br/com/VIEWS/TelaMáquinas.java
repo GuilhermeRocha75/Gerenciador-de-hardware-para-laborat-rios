@@ -6,8 +6,11 @@
 package br.com.VIEWS;
 
 import br.com.DAO.ConexaoDAO;
+import br.com.DAO.MaquinasDAO;
 import br.com.DAO.UsuarioDAO;
+import br.com.DTO.MaquinasDTO;
 import br.com.DTO.UsuarioDTO;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -29,6 +32,12 @@ public class TelaMáquinas extends javax.swing.JInternalFrame {
     public TelaMáquinas() {
         initComponents();
         conexao = ConexaoDAO.conector();
+        
+        MaquinasDAO maquinasDAO = new MaquinasDAO();
+    maquinasDAO.carregarMaquinasNaTabela(TabelaMaquinas); // onde tabelaMaquinas é o seu JTable
+        
+        
+        
     }
 
      
@@ -66,11 +75,9 @@ public class TelaMáquinas extends javax.swing.JInternalFrame {
         jLabel5 = new javax.swing.JLabel();
         txtIdLab = new javax.swing.JTextField();
         lblData = new javax.swing.JLabel();
-        txtData = new javax.swing.JPasswordField();
-        lblData1 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        BoxStaus = new javax.swing.JComboBox<>();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        TabelaMaquinas = new javax.swing.JTable();
         jLabel4 = new javax.swing.JLabel();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
@@ -183,37 +190,33 @@ public class TelaMáquinas extends javax.swing.JInternalFrame {
         lblData.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         lblData.setText("Status:");
 
-        txtData.addActionListener(new java.awt.event.ActionListener() {
+        BoxStaus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Funcionando", "Em manutenção", "Fora de uso" }));
+        BoxStaus.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtDataActionPerformed(evt);
+                BoxStausActionPerformed(evt);
             }
         });
 
-        lblData1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        lblData1.setText("Data de aquisição:");
-
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Funcionando", "Em manutenção", "Fora de uso" }));
-
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        TabelaMaquinas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
             },
             new String [] {
-                "ID máquina", "ID Laboratório", "Nome", "CPU", "RAM", "Armazenamento", "Data de aquisição", "Status"
+                "ID máquina", "ID Laboratório", "Nome", "CPU", "RAM", "Armazenamento", "Status"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.Integer.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
         });
-        jScrollPane2.setViewportView(jTable2);
+        jScrollPane2.setViewportView(TabelaMaquinas);
 
         jLabel4.setText("Máquinas Cadastradas:");
 
@@ -222,40 +225,30 @@ public class TelaMáquinas extends javax.swing.JInternalFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel4)
-                .addGap(207, 207, 207))
-            .addGroup(layout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 512, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 17, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
-                .addGap(41, 41, 41)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(jLabel2)
-                            .addGap(18, 18, 18)
-                            .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(layout.createSequentialGroup()
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(lblRAM)
-                                .addComponent(lblCPU)
-                                .addComponent(lblData1)
-                                .addComponent(lblArmazenamento))
-                            .addGap(18, 18, 18)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(txtArmazenamento)
-                                .addComponent(txtCPU)
-                                .addComponent(txtRAM)
-                                .addComponent(txtData, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(lblData)
-                            .addGap(46, 46, 46)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(55, 55, 55)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(113, 113, 113)
+                        .addGap(53, 53, 53)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addGap(18, 18, 18)
+                                .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(lblRAM)
+                                    .addComponent(lblCPU)
+                                    .addComponent(lblArmazenamento))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txtArmazenamento, javax.swing.GroupLayout.DEFAULT_SIZE, 224, Short.MAX_VALUE)
+                                    .addComponent(txtCPU)
+                                    .addComponent(txtRAM)))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(154, 154, 154)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel1)
@@ -264,9 +257,15 @@ public class TelaMáquinas extends javax.swing.JInternalFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel5)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(txtIdLab, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(28, 28, 28)
+                                .addComponent(txtIdLab, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap(121, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addGap(207, 207, 207))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(btnPesquisar)
@@ -278,13 +277,18 @@ public class TelaMáquinas extends javax.swing.JInternalFrame {
                                 .addGap(80, 80, 80)
                                 .addComponent(btnEditar)
                                 .addGap(18, 18, 18)
-                                .addComponent(btnExcluir1)))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(btnExcluir1))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(lblData)
+                                .addGap(46, 46, 46)
+                                .addComponent(BoxStaus, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(104, 104, 104)))
+                        .addGap(45, 45, 45))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(12, Short.MAX_VALUE)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -312,14 +316,10 @@ public class TelaMáquinas extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtArmazenamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblArmazenamento))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblData1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblData)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(BoxStaus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -329,7 +329,7 @@ public class TelaMáquinas extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnExcluir1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(40, 40, 40))
+                .addGap(62, 62, 62))
         );
 
         pack();
@@ -337,39 +337,7 @@ public class TelaMáquinas extends javax.swing.JInternalFrame {
 
     private void btnIncluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIncluirActionPerformed
         
-        
-    // Verifique se qualquer um dos campos obrigatórios está vazio
-    if (txtIdMaquina.getText().trim().isEmpty() || txtNome.getText().trim().isEmpty()|| txtCPU.getText().trim().isEmpty() || txtRAM.getText().trim().isEmpty() || txtArmazenamento.getText().trim().isEmpty()) {
-        // Exibe mensagem de erro se qualquer um dos campos estiver vazio
-        JOptionPane.showMessageDialog(null, "Preencha todos os campos!", "Erro", JOptionPane.ERROR_MESSAGE);
-    } else {
-        // Captura de dados na tela Usuario
-        int id_Usuario = Integer.parseInt(txtIdMaquina.getText());
-        String nome_Usuario = txtNome.getText();
-        String usuario_Usuario = txtCPU.getText();
-        String email_Usuario = txtRAM.getText();
-        String senha_Usuario = txtArmazenamento.getText();
-        
-        
-        UsuarioDAO objUsuarioDAO = new UsuarioDAO();
-
-        // Verifica se o id ou login já existem
-        if (objUsuarioDAO.verificarUsuarioExistente(id_Usuario)) {
-            JOptionPane.showMessageDialog(null, "O ID já estão cadastrados!", "Erro", JOptionPane.ERROR_MESSAGE);
-        } else {
-            // Se não existir, insere o novo usuário
-            UsuarioDTO objUsuarioDTO = new UsuarioDTO();
-            objUsuarioDTO.setIdUsuario(id_Usuario);
-            objUsuarioDTO.setNomeUsuario(nome_Usuario);
-           
-            objUsuarioDTO.setEmailUsuario(email_Usuario);
-            objUsuarioDTO.setSenhaUsuario(senha_Usuario);
-
-            objUsuarioDAO.inserirUsuario(objUsuarioDTO);
-            JOptionPane.showMessageDialog(null, "Usuário cadastrado com sucesso!");
-            
-        }
-    }
+      
 
         
     }//GEN-LAST:event_btnIncluirActionPerformed
@@ -381,8 +349,8 @@ public class TelaMáquinas extends javax.swing.JInternalFrame {
     private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
         //metodo botao limpar
           
-       UsuarioDAO objUsuarioDAO = new UsuarioDAO();       
-            objUsuarioDAO.limpar();
+       MaquinasDAO objMaquinasDAO = new MaquinasDAO();       
+            objMaquinasDAO.limpar();
     }//GEN-LAST:event_btnLimparActionPerformed
 
     private void txtRAMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtRAMActionPerformed
@@ -437,28 +405,31 @@ public class TelaMáquinas extends javax.swing.JInternalFrame {
         // Chamada do metodo Pesquisar
 
         // Obtém o ID do campo de texto
-        int idUsuario = Integer.parseInt(txtIdMaquina.getText());
+        int idMaquinas = Integer.parseInt(txtIdMaquina.getText());
 
         // Cria uma instância do DAO
-        UsuarioDAO usuarioDAO = new UsuarioDAO();
+        MaquinasDAO MaquinasDAO = new MaquinasDAO();
         
 
         // Chama o método pesquisar e obtém o resultado
-        UsuarioDTO usuarioDTO = usuarioDAO.pesquisarUsuario(idUsuario);
+        MaquinasDTO MaquinasDTO = MaquinasDAO.pesquisarMaquinas(idMaquinas);
 
-        if (usuarioDTO != null) {
+        if (MaquinasDTO != null) {
             // Preenche os campos com os dados do usuário encontrado
-            txtNome.setText(usuarioDTO.getNomeUsuario());
-            
-            txtRAM.setText(usuarioDTO.getEmailUsuario());
-            txtArmazenamento.setText(usuarioDTO.getSenhaUsuario());
+           
+             txtIdLab.setText(String.valueOf(MaquinasDTO.getIdLab())); // Converte o ID para String
+            txtNome.setText(MaquinasDTO.getNome());
+            txtCPU.setText(MaquinasDTO.getCpu());
+            txtRAM.setText(MaquinasDTO.getRam());
+            txtArmazenamento.setText(MaquinasDTO.getArmazenamento());
+              BoxStaus.setSelectedItem(MaquinasDTO.getStatus());
         } else {
             // Mostra uma mensagem de erro se o usuário não for encontrado
             JOptionPane.showMessageDialog(null, "Usuário não cadastrado!");
 
             //metodo para apagar os campos
-            UsuarioDAO objUsuarioDAO = new UsuarioDAO();
-            objUsuarioDAO.limpar();
+            MaquinasDAO objMaquinasDAO = new MaquinasDAO();
+            objMaquinasDAO.limpar();
         }
     }//GEN-LAST:event_btnPesquisarActionPerformed
 
@@ -466,18 +437,19 @@ public class TelaMáquinas extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtIdLabActionPerformed
 
-    private void txtDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDataActionPerformed
+    private void BoxStausActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BoxStausActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtDataActionPerformed
+    }//GEN-LAST:event_BoxStausActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    public static javax.swing.JComboBox<String> BoxStaus;
+    private javax.swing.JTable TabelaMaquinas;
     private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnExcluir1;
     private javax.swing.JButton btnIncluir;
     private javax.swing.JButton btnLimpar;
     private javax.swing.JButton btnPesquisar;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -486,15 +458,12 @@ public class TelaMáquinas extends javax.swing.JInternalFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
     private javax.swing.JLabel lblArmazenamento;
     private javax.swing.JLabel lblCPU;
     private javax.swing.JLabel lblData;
-    private javax.swing.JLabel lblData1;
     private javax.swing.JLabel lblRAM;
     public static javax.swing.JPasswordField txtArmazenamento;
     public static javax.swing.JTextField txtCPU;
-    public static javax.swing.JPasswordField txtData;
     public static javax.swing.JTextField txtIdLab;
     public static javax.swing.JTextField txtIdMaquina;
     public static javax.swing.JTextField txtNome;

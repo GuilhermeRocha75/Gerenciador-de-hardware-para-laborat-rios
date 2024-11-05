@@ -121,7 +121,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
             }
         });
 
-        submenuUsuarios.setText("Usuarios");
+        submenuUsuarios.setText("Máquinas");
         submenuUsuarios.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 submenuUsuariosActionPerformed(evt);
@@ -129,7 +129,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         });
         subMenuUsuarios.add(submenuUsuarios);
 
-        submenuClientes.setText("Cliente");
+        submenuClientes.setText("Usuários");
         submenuClientes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 submenuClientesActionPerformed(evt);

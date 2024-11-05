@@ -7,7 +7,11 @@ import br.com.VIEWS.TelaMáquinas;
 import br.com.VIEWS.TelaUsuarios;
 import java.awt.Color;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JOptionPane;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 public class UsuarioDAO {
@@ -48,7 +52,7 @@ public class UsuarioDAO {
      public void limpar(){
          TelaUsuarios.txtIdUsuario.setText(null);
          TelaUsuarios.txtNomeUsuario.setText(null);
-         TelaUsuarios.txtPerfil.setText(null);
+         TelaUsuarios.boxPerfil.setSelectedIndex(-1);
          TelaUsuarios.txtSenha.setText(null);
          TelaUsuarios.txtEmail.setText(null);
          TelaUsuarios.txtData.setText(null);
@@ -90,60 +94,39 @@ public class UsuarioDAO {
     }
     
     //Metodo inserir/adicionar usuarios
-    public void inserirUsuario(UsuarioDTO objUsuarioDTO){
-        String sql = "insert into usuarios(id_usuario, nome, email, senha, perfil, data_cadastro) values(?, ?, ?, ?, ?, ?)";
-        conexao = new ConexaoDAO().conector();
-        
-        try {
-            pst = conexao.prepareStatement(sql);
-            pst.setInt(1, objUsuarioDTO.getIdUsuario());
-            pst.setString(2, objUsuarioDTO.getNomeUsuario());
-            pst.setString(3, objUsuarioDTO.getEmailUsuario());
-            pst.setString(4, objUsuarioDTO.getSenhaUsuario());
-            pst.setString(5, objUsuarioDTO.getPerfilUsuario()); 
-            pst.setString(6, objUsuarioDTO.getDataCadastro());
-          
-            
-            pst.execute();
-            pst.close();
-             limpar();
-            
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Inserir Usuario:" + e);
-        }
-
-    }   
-      //Metodo para virificar se usuario ou id ja existem
-    public boolean verificarUsuarioExistente(int idUsuario) {
-        String sql = "SELECT * FROM usuarios WHERE id_usuario = ?";
-        conexao = new ConexaoDAO().conector();
-        boolean existe = false;
-
-        try {
-            pst = conexao.prepareStatement(sql);
-            pst.setInt(1, idUsuario);
-            
-            rs = pst.executeQuery();
-
-            if (rs.next()) {
-                existe = true;  // Se houver resultado, o usuário já existe
-            }
-            
-            rs.close();
-            pst.close();
-            
-            
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Erro ao verificar usuário existente: " + e);
-        }
-
-        return existe;
-    }
+public void inserirUsuario(UsuarioDTO objUsuarioDTO) {
+    // Atualizando a consulta SQL para não incluir a data_cadastro
+    String sql = "INSERT INTO usuarios (nome, email, senha, perfil) VALUES (?, ?, ?, ?)";
+    conexao = new ConexaoDAO().conector();
     
+    try {
+        pst = conexao.prepareStatement(sql);
+        
+        // Remove o parâmetro id_usuario e data_cadastro
+        // pst.setInt(1, objUsuarioDTO.getIdUsuario()); // Não é mais necessário
+        pst.setString(1, objUsuarioDTO.getNomeUsuario());
+        pst.setString(2, objUsuarioDTO.getEmailUsuario());
+        pst.setString(3, objUsuarioDTO.getSenhaUsuario());
+        pst.setString(4, objUsuarioDTO.getPerfilUsuario()); 
+
+        // Executa a inserção
+        pst.executeUpdate(); // Use executeUpdate() para inserções
+        pst.close();
+
+        // Limpa os campos após a inserção, se necessário
+        limpar();
+        
+        JOptionPane.showMessageDialog(null, "Usuário inserido com sucesso!");
+        
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "Inserir Usuário: " + e);
+    }
+}
+
     
     //Metodo editar
     public void editar(UsuarioDTO objUsarioDTO){
-        String sql = "update usuarios set nome = ?, perfil = ?, email = ?, senha = ?, data = ? where id_usuario = ?";
+        String sql = "update usuarios set nome = ?, perfil = ?, email = ?, senha = ?, data_cadastro = ? where id_usuario = ?";
          conexao = ConexaoDAO.conector();
          try {
                pst = conexao.prepareStatement(sql);
@@ -151,8 +134,8 @@ public class UsuarioDAO {
                pst.setString(2, objUsarioDTO.getPerfilUsuario());
                pst.setString(3, objUsarioDTO.getEmailUsuario());
                pst.setString(4, objUsarioDTO.getSenhaUsuario());
-               pst.setString(4, objUsarioDTO.getDataCadastro());
-                pst.setInt(5, objUsarioDTO.getIdUsuario());
+               pst.setString(5, objUsarioDTO.getDataCadastro());
+                pst.setInt(6, objUsarioDTO.getIdUsuario());
                 
                int add = pst.executeUpdate();
                if (add >0){
@@ -170,29 +153,67 @@ public class UsuarioDAO {
     }
     
     //Metodo Excluir
-    public void excluir (UsuarioDTO objUsuarioDTO){
-        String sql = "delete from usuarios where id_usuario = ?";
-        conexao = ConexaoDAO.conector();
+public void excluir(UsuarioDTO objUsuarioDTO) {
+    String sql = "DELETE FROM usuarios WHERE id_usuario = ?";
+    conexao = new ConexaoDAO().conector();
+    
+    try {
+        pst = conexao.prepareStatement(sql);
+        pst.setInt(1, objUsuarioDTO.getIdUsuario());
         
-        try {
-              pst = conexao.prepareStatement(sql);
-              pst.setInt(1, objUsuarioDTO.getIdUsuario());
-            
-                    int add = pst.executeUpdate();
-                    if (add >0){
-                    JOptionPane.showMessageDialog(null, "Usuário excluido com sucesso!");
-                    //pesquisaAuto();
-                    conexao.close();
-                   limpar();
-               }
-              
-                      } catch (Exception e) {
-        JOptionPane.showMessageDialog(null, "Método apagar" +e);
+        int linhasAfetadas = pst.executeUpdate(); // Use executeUpdate para operações de DML
+
+        if (linhasAfetadas > 0) {
+            JOptionPane.showMessageDialog(null, "Usuário excluído com sucesso!");
+        } else {
+            JOptionPane.showMessageDialog(null, "Usuário não encontrado!");
         }
-        
+
+        pst.close();
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "Erro ao excluir usuário: " + e);
     }
+    limpar();
+}
+
     
-    
+    //Método para configurar JComboBox
+  
+
+    public List<String> obterPerfis() {
+        List<String> perfis = new ArrayList<>();
+        String sql = "SELECT DISTINCT Perfil FROM Usuarios";
+        
+        try (Connection conn = ConexaoDAO.conector();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                perfis.add(rs.getString("Perfil"));
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Erro ao carregar perfis: " + e.getMessage());
+        }
+        return perfis;
+    }
+
+    //Método para formatar data para Dia-MÊs-Ano
+    public String formatarData(String dataString) {
+    try {
+        // Cria um formato de data que corresponde ao formato da string de entrada
+        SimpleDateFormat formatoEntrada = new SimpleDateFormat("dd/MM/yyyy");
+        // Cria um formato de data que corresponde ao formato desejado
+        SimpleDateFormat formatoSaida = new SimpleDateFormat("yyyy-MM-dd");
+        
+        // Converte a string para uma data
+        Date data = formatoEntrada.parse(dataString);
+        // Retorna a data formatada como uma string no formato correto
+        return formatoSaida.format(data);
+    } catch (Exception e) {
+        e.printStackTrace();
+        return null; // Ou trate o erro de acordo
+    }
+}
     
     
     
