@@ -51,12 +51,12 @@ public class MaquinasDAO {
    
    
      public void limpar(){
-         TelaMáquinas.txtArmazenamento.setText(null);
+         TelaMáquinas.txtRAM.setText(null);
          TelaMáquinas.txtCPU.setText(null);
          TelaMáquinas.txtIdLab.setText(null);
          TelaMáquinas.txtIdMaquina.setText(null);
          TelaMáquinas.txtNome.setText(null);
-         TelaMáquinas.txtRAM.setText(null);
+         TelaMáquinas.txtArmazenamento.setText(null);
          TelaMáquinas.BoxStaus.setSelectedIndex(-1);
     }
     
@@ -171,6 +171,93 @@ public class MaquinasDAO {
        
     }
      
+    
+    //Metodo inserir/adicionar usuarios
+public void inserirUsuario(MaquinasDTO objMaquinasDTO) {
+    // Atualizando a consulta SQL para não incluir a data_cadastro
+    String sql = "INSERT INTO maquinas (id_laboratorio, nome, cpu, ram,armazenamento,status) VALUES (?, ?, ?, ?, ?, ?)";
+    conexao = new ConexaoDAO().conector();
+    
+    try {
+        pst = conexao.prepareStatement(sql);
+        
+        // Remove o parâmetro id_usuario e data_cadastro
+        // pst.setInt(1, objUsuarioDTO.getIdUsuario()); // Não é mais necessário
+        pst.setInt(1, objMaquinasDTO.getIdLab());
+        pst.setString(2, objMaquinasDTO.getNome());
+        pst.setString(3, objMaquinasDTO.getCpu());
+        pst.setString(4, objMaquinasDTO.getRam()); 
+        pst.setString(5, objMaquinasDTO.getArmazenamento()); 
+        pst.setString(6, objMaquinasDTO.getStatus()); 
+
+        // Executa a inserção
+        pst.executeUpdate(); // Use executeUpdate() para inserções
+        pst.close();
+
+        // Limpa os campos após a inserção, se necessário
+        limpar();
+        
+        JOptionPane.showMessageDialog(null, "Máquina inserida com sucesso!");
+        
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "Inserir máquina: " + e);
+    }
+}
+
+     //Metodo editar
+    public void editar(MaquinasDTO objUMaquinasDTO){
+        String sql = "update maquinas set id_laboratorio = ?, nome = ?, cpu = ?, ram = ?, armazenamento = ?, status = ? where id_maquina = ?";
+         conexao = ConexaoDAO.conector();
+
+         try {
+               pst = conexao.prepareStatement(sql);
+               pst.setInt(1, objUMaquinasDTO.getIdLab());
+               pst.setString(2, objUMaquinasDTO.getNome());
+               pst.setString(3, objUMaquinasDTO.getCpu());
+               pst.setString(4, objUMaquinasDTO.getRam());
+               pst.setString(5, objUMaquinasDTO.getArmazenamento());
+               pst.setString(6, objUMaquinasDTO.getStatus());
+               pst.setInt(7, objUMaquinasDTO.getIdMaquina());
+             
+                
+               int add = pst.executeUpdate();
+               if (add >0){
+                   JOptionPane.showMessageDialog(null, "Máquina editada com sucesso!");
+                    conexao.close();
+                    limpar();
+               }
+               
+            
+        } catch (Exception e) {
+        JOptionPane.showMessageDialog(null," Método editar " + e);
+        
+        }
+    }
+    
+        //Metodo Excluir
+public void excluir(MaquinasDTO objMaquinasDTO) {
+    String sql = "DELETE FROM maquinas WHERE id_maquina = ?";
+    conexao = new ConexaoDAO().conector();
+    
+    try {
+        pst = conexao.prepareStatement(sql);
+        pst.setInt(1, objMaquinasDTO.getIdMaquina());
+        
+        int linhasAfetadas = pst.executeUpdate(); // Use executeUpdate para operações de DML
+
+        if (linhasAfetadas > 0) {
+            JOptionPane.showMessageDialog(null, "Máquina excluída com sucesso!");
+        } else {
+            JOptionPane.showMessageDialog(null, "Máquina não encontrada!");
+        }
+
+        pst.close();
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "Erro ao excluir a máquina: " + e);
+    }
+    limpar();
+}
+    
      
      
 }

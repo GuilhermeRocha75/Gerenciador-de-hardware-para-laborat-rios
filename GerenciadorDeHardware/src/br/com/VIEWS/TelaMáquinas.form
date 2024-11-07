@@ -124,8 +124,8 @@
                               </Group>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="txtArmazenamento" pref="224" max="32767" attributes="0"/>
-                                  <Component id="txtCPU" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="txtCPU" alignment="0" pref="224" max="32767" attributes="0"/>
+                                  <Component id="txtArmazenamento" alignment="0" max="32767" attributes="0"/>
                                   <Component id="txtRAM" alignment="0" max="32767" attributes="0"/>
                               </Group>
                           </Group>
@@ -173,9 +173,9 @@
                           </Group>
                           <Group type="102" alignment="1" attributes="0">
                               <Component id="lblData" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="46" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
                               <Component id="BoxStaus" min="-2" pref="140" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="104" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="120" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace min="-2" pref="45" max="-2" attributes="0"/>
@@ -212,14 +212,14 @@
                   <Component id="txtCPU" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="lblRAM" min="-2" max="-2" attributes="0"/>
-                  <Component id="txtRAM" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="txtArmazenamento" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="lblRAM" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="txtRAM" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="lblArmazenamento" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="txtArmazenamento" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
@@ -332,15 +332,10 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnLimparActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JTextField" name="txtRAM">
+    <Component class="javax.swing.JTextField" name="txtArmazenamento">
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtRAMActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtArmazenamentoActionPerformed"/>
       </Events>
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="9"/>
-      </AuxValues>
-    </Component>
-    <Component class="javax.swing.JPasswordField" name="txtArmazenamento">
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="9"/>
       </AuxValues>
@@ -484,6 +479,14 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="M&#xe1;quinas Cadastradas:"/>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="txtRAM">
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtRAMActionPerformed"/>
+      </Events>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="9"/>
+      </AuxValues>
     </Component>
   </SubComponents>
 </Form>

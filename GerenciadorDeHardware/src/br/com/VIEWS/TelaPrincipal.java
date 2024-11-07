@@ -243,6 +243,11 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+           //chamar tela pecas
+        Telapecas tUsuario = new Telapecas();
+        tUsuario.setVisible(true);
+         DesktopPrincipal.add(tUsuario);
+
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 

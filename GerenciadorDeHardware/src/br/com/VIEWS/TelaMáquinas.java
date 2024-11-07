@@ -67,8 +67,7 @@ public class TelaMáquinas extends javax.swing.JInternalFrame {
         lblRAM = new javax.swing.JLabel();
         lblArmazenamento = new javax.swing.JLabel();
         btnLimpar = new javax.swing.JButton();
-        txtRAM = new javax.swing.JTextField();
-        txtArmazenamento = new javax.swing.JPasswordField();
+        txtArmazenamento = new javax.swing.JTextField();
         btnExcluir1 = new javax.swing.JButton();
         txtNome = new javax.swing.JTextField();
         lblCPU = new javax.swing.JLabel();
@@ -79,6 +78,7 @@ public class TelaMáquinas extends javax.swing.JInternalFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         TabelaMaquinas = new javax.swing.JTable();
         jLabel4 = new javax.swing.JLabel();
+        txtRAM = new javax.swing.JTextField();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -155,9 +155,9 @@ public class TelaMáquinas extends javax.swing.JInternalFrame {
             }
         });
 
-        txtRAM.addActionListener(new java.awt.event.ActionListener() {
+        txtArmazenamento.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtRAMActionPerformed(evt);
+                txtArmazenamentoActionPerformed(evt);
             }
         });
 
@@ -220,6 +220,12 @@ public class TelaMáquinas extends javax.swing.JInternalFrame {
 
         jLabel4.setText("Máquinas Cadastradas:");
 
+        txtRAM.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtRAMActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -244,8 +250,8 @@ public class TelaMáquinas extends javax.swing.JInternalFrame {
                                     .addComponent(lblArmazenamento))
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(txtArmazenamento, javax.swing.GroupLayout.DEFAULT_SIZE, 224, Short.MAX_VALUE)
-                                    .addComponent(txtCPU)
+                                    .addComponent(txtCPU, javax.swing.GroupLayout.DEFAULT_SIZE, 224, Short.MAX_VALUE)
+                                    .addComponent(txtArmazenamento)
                                     .addComponent(txtRAM)))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(154, 154, 154)
@@ -280,9 +286,9 @@ public class TelaMáquinas extends javax.swing.JInternalFrame {
                                 .addComponent(btnExcluir1))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(lblData)
-                                .addGap(46, 46, 46)
+                                .addGap(30, 30, 30)
                                 .addComponent(BoxStaus, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(104, 104, 104)))
+                                .addGap(120, 120, 120)))
                         .addGap(45, 45, 45))))
         );
         layout.setVerticalGroup(
@@ -309,13 +315,13 @@ public class TelaMáquinas extends javax.swing.JInternalFrame {
                     .addComponent(lblCPU)
                     .addComponent(txtCPU, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblRAM)
                     .addComponent(txtRAM, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(6, 6, 6)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtArmazenamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblArmazenamento))
+                    .addComponent(lblArmazenamento)
+                    .addComponent(txtArmazenamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblData)
@@ -336,6 +342,54 @@ public class TelaMáquinas extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnIncluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIncluirActionPerformed
+                                          
+    try {
+        if (txtIdMaquina.getText().isEmpty() 
+                || txtIdLab.getText().isEmpty()
+                ||  txtNome.getText().isEmpty() 
+                || txtCPU.getText().isEmpty()
+                || txtRAM.getText().isEmpty()
+                || txtArmazenamento.getText().isEmpty()
+                || BoxStaus.getSelectedItem() == null) {
+            JOptionPane.showMessageDialog(null, "Por favor, preencha todos os campos obrigatórios!");
+            return;
+        }
+
+        // Obtém os dados dos campos
+        
+        /*String id_maquina = txtIdMaquina.getText();
+        String id_lab = txtIdLab.getText();*/
+        
+        String nome_maquina = txtNome.getText();
+        String cpu_maquina = txtCPU.getText();
+        String ram_maquina = txtRAM.getText();
+        String armazenamneto_maquina = txtArmazenamento.getText();
+        String status_maquina = BoxStaus.getSelectedItem().toString();
+
+        
+        // Criação do objeto UsuarioDTO
+       MaquinasDTO objMaquinasDTO = new MaquinasDTO();
+        
+        /*objMaquin asDTO.setIdMaquina(id_maquina);
+        objMaquinasDTO.setIdLab(id_lab);*/
+        
+        objMaquinasDTO.setNome(nome_maquina);
+        objMaquinasDTO.setCpu(cpu_maquina);
+        objMaquinasDTO.setRam(ram_maquina);
+        objMaquinasDTO.setArmazenamento(armazenamneto_maquina);
+        objMaquinasDTO.setStatus(status_maquina);
+        
+        // Instância do UsuarioDAO para inserir
+        MaquinasDAO objMaquinasDAO = new MaquinasDAO();
+        objMaquinasDAO.inserirUsuario(objMaquinasDTO);
+
+        // Limpa os campos após a inserção
+        objMaquinasDAO.limpar();
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "Erro ao incluir usuário: " + e.getMessage());
+    }
+
         
       
 
@@ -353,48 +407,55 @@ public class TelaMáquinas extends javax.swing.JInternalFrame {
             objMaquinasDAO.limpar();
     }//GEN-LAST:event_btnLimparActionPerformed
 
-    private void txtRAMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtRAMActionPerformed
+    private void txtArmazenamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtArmazenamentoActionPerformed
+
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtRAMActionPerformed
+    }//GEN-LAST:event_txtArmazenamentoActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        // TODO add your handling code here:
+          // TODO add your handling code here:
+// Botão editar (adaptado para a classe UsuarioDAO)
+int id_lab = Integer.parseInt(txtIdLab.getText());
+   String nome_maquina = txtNome.getText();
+        String cpu_maquina = txtCPU.getText();
+        String ram_maquina = txtRAM.getText();
+        String armazenamneto_maquina = txtArmazenamento.getText();
+        String status_maquina = BoxStaus.getSelectedItem().toString();
+
+
+ MaquinasDTO objMaquinasDTO = new MaquinasDTO();
         
-       //Botao editar(msm codigo btn inlcuir)
-        int id_usuario = Integer.parseInt(txtIdMaquina.getText());
-        String nome_usuario = txtNome.getText();
-        String usuario_usuario = txtCPU.getText();
-        String email_usuario = txtRAM.getText();
-        String senha_usuario = txtArmazenamento.getText();
-
-
-        UsuarioDTO objusuarioDTO = new UsuarioDTO();
-        objusuarioDTO.setIdUsuario (id_usuario);
-        objusuarioDTO.setNomeUsuario (nome_usuario);
-       
-        objusuarioDTO.setEmailUsuario(email_usuario);
-        objusuarioDTO.setSenhaUsuario(senha_usuario);
-
-            UsuarioDAO objUsuarioDAO = new UsuarioDAO();       
-            objUsuarioDAO.editar(objusuarioDTO);
+   
+        objMaquinasDTO.setIdLab(id_lab);
         
+        objMaquinasDTO.setNome(nome_maquina);
+        objMaquinasDTO.setCpu(cpu_maquina);
+        objMaquinasDTO.setRam(ram_maquina);
+        objMaquinasDTO.setArmazenamento(armazenamneto_maquina);
+        objMaquinasDTO.setStatus(status_maquina);
+
+// Instância do UsuarioDAO
+MaquinasDAO objMaquinasDAO = new MaquinasDAO();
+objMaquinasDAO.editar(objMaquinasDTO); // Chama o método para editar no UsuarioDAO
         
     
         
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnExcluir1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluir1ActionPerformed
-        // TODO add your handling code here:
-        
-        String idUsuario = txtIdMaquina.getText();
-        
-        UsuarioDTO objUsuarioDTO = new UsuarioDTO();
-        objUsuarioDTO.setIdUsuario(Integer.parseInt(idUsuario));
-        
-        UsuarioDAO objUsuarioDAO = new UsuarioDAO();
-        objUsuarioDAO.excluir(objUsuarioDTO);
-     
-        
+    // TODO add your handling code here:
+String idMaquina = txtIdMaquina.getText();
+
+if (idMaquina.trim().isEmpty()) {
+    JOptionPane.showMessageDialog(null, "O campo ID não pode estar vazio!", "Erro", JOptionPane.ERROR_MESSAGE);
+} else {
+    MaquinasDTO objMaquinasDTO = new MaquinasDTO();
+    objMaquinasDTO.setIdMaquina(Integer.parseInt(idMaquina)); // Altere para setIdUsuario se necessário
+
+    MaquinasDAO objMaquinasDAO = new MaquinasDAO();
+    objMaquinasDAO.excluir(objMaquinasDTO); // Chama o método de exclusão
+
+}
     }//GEN-LAST:event_btnExcluir1ActionPerformed
 
     private void txtNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNomeActionPerformed
@@ -441,6 +502,10 @@ public class TelaMáquinas extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_BoxStausActionPerformed
 
+    private void txtRAMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtRAMActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtRAMActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public static javax.swing.JComboBox<String> BoxStaus;
@@ -462,7 +527,7 @@ public class TelaMáquinas extends javax.swing.JInternalFrame {
     private javax.swing.JLabel lblCPU;
     private javax.swing.JLabel lblData;
     private javax.swing.JLabel lblRAM;
-    public static javax.swing.JPasswordField txtArmazenamento;
+    public static javax.swing.JTextField txtArmazenamento;
     public static javax.swing.JTextField txtCPU;
     public static javax.swing.JTextField txtIdLab;
     public static javax.swing.JTextField txtIdMaquina;

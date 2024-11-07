@@ -5,6 +5,10 @@
  */
 package br.com.VIEWS;
 
+import br.com.DAO.PecasDAO;
+import br.com.DTO.PecasDTO;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author aluno.saolucas
@@ -16,6 +20,10 @@ public class Telapecas extends javax.swing.JInternalFrame {
      */
     public Telapecas() {
         initComponents();
+        
+        PecasDAO pecasDAO = new PecasDAO();
+    pecasDAO.carregarTabela(tablePecas); // onde tabelaMaquinas é o seu JTable
+        
     }
 
     /**
@@ -33,12 +41,19 @@ public class Telapecas extends javax.swing.JInternalFrame {
         txtNomePeca = new javax.swing.JTextField();
         txtTipoPeca = new javax.swing.JTextField();
         txtFabricantePeca = new javax.swing.JTextField();
-        jTextField5 = new javax.swing.JTextField();
+        txtIdPecas = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
+        btnPesquisar = new javax.swing.JButton();
+        btnLimpar = new javax.swing.JButton();
+        btnIncluir = new javax.swing.JButton();
+        btnExcluir1 = new javax.swing.JButton();
+        btnEditar = new javax.swing.JButton();
+
+        setClosable(true);
 
         tablePecas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -67,9 +82,9 @@ public class Telapecas extends javax.swing.JInternalFrame {
             }
         });
 
-        jTextField5.addActionListener(new java.awt.event.ActionListener() {
+        txtIdPecas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField5ActionPerformed(evt);
+                txtIdPecasActionPerformed(evt);
             }
         });
 
@@ -82,6 +97,46 @@ public class Telapecas extends javax.swing.JInternalFrame {
         jLabel4.setText("Fabricante:");
 
         jLabel5.setText("Quantidade:");
+
+        btnPesquisar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icones/iconePesquisar.png"))); // NOI18N
+        btnPesquisar.setText("Pesquisar");
+        btnPesquisar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPesquisarActionPerformed(evt);
+            }
+        });
+
+        btnLimpar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icones/iconeLimpar.png"))); // NOI18N
+        btnLimpar.setText("Limpar");
+        btnLimpar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimparActionPerformed(evt);
+            }
+        });
+
+        btnIncluir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icones/iconeAdd.png"))); // NOI18N
+        btnIncluir.setText("incluir");
+        btnIncluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIncluirActionPerformed(evt);
+            }
+        });
+
+        btnExcluir1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icones/IconeExcluir.png"))); // NOI18N
+        btnExcluir1.setText("excluir");
+        btnExcluir1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExcluir1ActionPerformed(evt);
+            }
+        });
+
+        btnEditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icones/iconeEditar.png"))); // NOI18N
+        btnEditar.setText("editar");
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -103,11 +158,26 @@ public class Telapecas extends javax.swing.JInternalFrame {
                             .addComponent(txtQuantidadadePeca, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtFabricantePeca, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtTipoPeca, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(txtIdPecas, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(86, 86, 86)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(59, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(80, 80, 80)
+                        .addComponent(btnEditar)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnExcluir1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnPesquisar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnLimpar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnIncluir)))
+                .addGap(72, 72, 72))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -116,7 +186,7 @@ public class Telapecas extends javax.swing.JInternalFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(44, 44, 44)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtIdPecas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
                 .addGap(9, 9, 9)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -134,7 +204,16 @@ public class Telapecas extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtQuantidadadePeca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5))
-                .addContainerGap(176, Short.MAX_VALUE))
+                .addGap(30, 30, 30)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnIncluir, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnExcluir1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(35, Short.MAX_VALUE))
         );
 
         pack();
@@ -144,23 +223,144 @@ public class Telapecas extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtQuantidadadePecaActionPerformed
 
-    private void jTextField5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField5ActionPerformed
+    private void txtIdPecasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdPecasActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField5ActionPerformed
+    }//GEN-LAST:event_txtIdPecasActionPerformed
+
+    private void btnPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisarActionPerformed
+        // Chamada do método Pesquisar
+
+        // Obtém o ID do campo de texto
+        int idPecas = Integer.parseInt(txtIdPecas.getText());
+
+        // Cria uma instância do DAO
+        PecasDAO PecasDAO = new PecasDAO();
+        // Chama o método pesquisar e obtém o resultado
+        PecasDTO PecasDTO = PecasDAO.pesquisarUsuario(idPecas);
+
+        if (PecasDTO != null) {
+            // Preenche os campos com os dados do cliente encontrado
+            txtNomePeca.setText(PecasDTO.getNome());
+            txtTipoPeca.setText(PecasDTO.getTipo());
+            txtFabricantePeca.setText(PecasDTO.getFabricante());
+            txtQuantidadadePeca.setText(PecasDTO.getQuantidade());
+  
+        } else {
+            // Mostra uma mensagem de erro se o cliente não for encontrado
+            JOptionPane.showMessageDialog(null, "Usuário não cadastrado!");
+
+            // Método para apagar os campos
+            PecasDAO.limpar();
+        }
+
+    }//GEN-LAST:event_btnPesquisarActionPerformed
+
+    private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
+        //metodo botao limpar
+
+        PecasDAO objPecasDAO = new PecasDAO();
+        objPecasDAO.limpar();
+    }//GEN-LAST:event_btnLimparActionPerformed
+
+    private void btnIncluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIncluirActionPerformed
+
+                                                  
+    try {
+        if (txtNomePeca.getText().isEmpty() || txtTipoPeca.getText().isEmpty() || 
+            txtFabricantePeca.getText().isEmpty() || txtQuantidadadePeca.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Por favor, preencha todos os campos obrigatórios!");
+            return;
+        }
+
+        // Obtém os dados dos campos
+        String nome = txtNomePeca.getText();
+        String tipo = txtTipoPeca.getText();
+        String fabricante = txtFabricantePeca.getText();
+        String quantidade = txtQuantidadadePeca.getText();
+        
+
+        // Criação do objeto UsuarioDTO
+        PecasDTO objPecasDTO = new PecasDTO();
+        objPecasDTO.setNome(nome);
+        objPecasDTO.setTipo(tipo);
+        objPecasDTO.setFabricante(fabricante);
+        objPecasDTO.setQuantidade(quantidade);
+        
+        // Instância do UsuarioDAO para inserir
+        PecasDAO objPecasDAO = new PecasDAO();
+        objPecasDAO.inserirUsuario(objPecasDTO);
+
+        // Limpa os campos após a inserção
+        objPecasDAO.limpar();
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "Erro ao inserir peça: " + e.getMessage());
+    }
+
+
+
+    }//GEN-LAST:event_btnIncluirActionPerformed
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+      
+           // TODO add your handling code here:
+// Botão editar (adaptado para a classe UsuarioDAO)
+int id_peca = Integer.parseInt(txtIdPecas.getText());
+String nome = txtNomePeca.getText();
+String tipo = txtTipoPeca.getText();
+String fabricante = txtFabricantePeca.getText();
+String quantidade = txtQuantidadadePeca.getText();
+
+
+// Criação do objeto UsuarioDTO
+PecasDTO objPecasDTO = new PecasDTO();
+objPecasDTO.setIdPeca(id_peca);
+objPecasDTO.setNome(nome);
+objPecasDTO.setTipo(tipo);
+objPecasDTO.setFabricante(fabricante);
+objPecasDTO.setQuantidade(quantidade);
+
+// Instância do UsuarioDAO
+PecasDAO objPecasDAO = new PecasDAO();
+objPecasDAO.editar(objPecasDTO); // Chama o método para editar no UsuarioDAO
+        
+        
+    }//GEN-LAST:event_btnEditarActionPerformed
+
+    private void btnExcluir1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluir1ActionPerformed
+        // TODO add your handling code here:
+        String idPecas = txtIdPecas.getText();
+
+        if (idPecas.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "O campo ID não pode estar vazio!", "Erro", JOptionPane.ERROR_MESSAGE);
+        } else {
+            PecasDTO objPecasDTO = new PecasDTO();
+            objPecasDTO.setIdPeca(Integer.parseInt(idPecas)); // Altere para setIdUsuario se necessário
+
+            PecasDAO objPecasDAO = new PecasDAO();
+            objPecasDAO.excluir(objPecasDTO); // Chama o método de exclusão
+
+        }
+    }//GEN-LAST:event_btnExcluir1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnEditar;
+    private javax.swing.JButton btnExcluir1;
+    private javax.swing.JButton btnIncluir;
+    private javax.swing.JButton btnLimpar;
+    private javax.swing.JButton btnPesquisar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTable tablePecas;
-    private javax.swing.JTextField txtFabricantePeca;
-    private javax.swing.JTextField txtNomePeca;
-    private javax.swing.JTextField txtQuantidadadePeca;
-    private javax.swing.JTextField txtTipoPeca;
+    public static javax.swing.JTable tablePecas;
+    public static javax.swing.JTextField txtFabricantePeca;
+    public static javax.swing.JTextField txtIdPecas;
+    public static javax.swing.JTextField txtNomePeca;
+    public static javax.swing.JTextField txtQuantidadadePeca;
+    public static javax.swing.JTextField txtTipoPeca;
     // End of variables declaration//GEN-END:variables
 }

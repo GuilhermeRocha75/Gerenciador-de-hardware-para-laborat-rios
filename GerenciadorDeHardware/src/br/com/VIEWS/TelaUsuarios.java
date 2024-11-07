@@ -16,7 +16,7 @@ import java.sql.ResultSet;
 import javax.swing.JOptionPane;
 import static br.com.VIEWS.TelaMáquinas.txtIdMaquina;
 import static br.com.VIEWS.TelaMáquinas.txtCPU;
-import static br.com.VIEWS.TelaMáquinas.txtRAM;
+import static br.com.VIEWS.TelaMáquinas.txtArmazenamento;
 import static br.com.VIEWS.TelaMáquinas.txtArmazenamento;
 
 /**
