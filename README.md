@@ -153,6 +153,8 @@ CREATE TABLE laboratorios (
     localizacao VARCHAR(255)
 );
 
+
+
 -- Tabela maquinas
 CREATE TABLE maquinas (
     id_maquina INT PRIMARY KEY AUTO_INCREMENT,
@@ -162,7 +164,6 @@ CREATE TABLE maquinas (
     ram VARCHAR(50),
     armazenamento VARCHAR(50),
     status ENUM('funcionando', 'em manutencao', 'fora de uso') DEFAULT 'funcionando',
-    data_aquisicao DATE,
     FOREIGN KEY (id_laboratorio) REFERENCES laboratorios(id_laboratorio)
 );
 
@@ -224,6 +225,24 @@ DROP COLUMN data_aquisicao;
 
 
 
+select  from usuarios;
+select  from maquinas;
 
+
+-- Adicionando dados em tabelas
+INSERT INTO laboratorios (id_laboratorio,nome,localizacao)
+values (1,'teste','teste');
+select  from laboratorios;
+select  from maquinas;
+INSERT INTO laboratorios (id_laboratorio,nome,localizacao)
+values (2,'teste','teste');
+
+INSERT INTO maquinas (id_maquina, nome, id_laboratorio, cpu, ram, armazenamento, status)
+values (1, 'teste', 1, 'intel', '8gb', '528gb', 'funcionando');
+INSERT INTO maquinas (id_maquina, nome, id_laboratorio, cpu, ram, armazenamento, status)
+values (2, 'teste', 2, 'intel', '8gb', '528gb', 'funcionando');
+
+INSERT INTO pecas (id_peca, nome, tipo, fabricante, quantidade)
+values (1, 'teste', 'teste', 'tetse', 8);
 
 ```
