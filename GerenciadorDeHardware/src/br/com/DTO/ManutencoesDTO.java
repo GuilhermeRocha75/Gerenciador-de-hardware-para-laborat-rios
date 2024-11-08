@@ -5,8 +5,16 @@ package br.com.DTO;
 public class ManutencoesDTO {
    
     private int idManutencao,idMaquina;
-      private String tipo,descricao,data,status;
+      private String responsavel, tipo,descricao,data,status;
 
+    public String getResponsavel() {
+        return responsavel;
+    }
+
+    public void setResponsavel(String responsavel) {
+        this.responsavel = responsavel;
+    }
+      
     public int getIdManutencao() {
         return idManutencao;
     }

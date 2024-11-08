@@ -252,7 +252,11 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
-        // TODO add your handling code here:
+ //chamar tela Manutencoes
+        TelaMaquinasManutencoes tUsuario = new TelaMaquinasManutencoes();
+        tUsuario.setVisible(true);
+         DesktopPrincipal.add(tUsuario);
+
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed

@@ -5,6 +5,10 @@
  */
 package br.com.VIEWS;
 
+import br.com.DAO.ManutencoesDAO;
+import br.com.DTO.ManutencoesDTO;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author aluno.saolucas
@@ -16,6 +20,11 @@ public class TelaMaquinasManutencoes extends javax.swing.JInternalFrame {
      */
     public TelaMaquinasManutencoes() {
         initComponents();
+        
+        //carregar tabela 
+        ManutencoesDAO ManutencoesDAO = new ManutencoesDAO();
+    ManutencoesDAO.carregarTabela(tableManutencoes); // onde tabelaMaquinas é o seu JTable
+        
     }
 
     /**
@@ -50,6 +59,8 @@ public class TelaMaquinasManutencoes extends javax.swing.JInternalFrame {
         btnIncluir = new javax.swing.JButton();
         txtResponsavel = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
+
+        setClosable(true);
 
         jLabel1.setText("Manutenções:");
 
@@ -120,12 +131,27 @@ public class TelaMaquinasManutencoes extends javax.swing.JInternalFrame {
 
         btnPesquisar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icones/iconePesquisar.png"))); // NOI18N
         btnPesquisar.setText("Pesquisar");
+        btnPesquisar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPesquisarActionPerformed(evt);
+            }
+        });
 
         btnLimpar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icones/iconeLimpar.png"))); // NOI18N
         btnLimpar.setText("Limpar");
+        btnLimpar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimparActionPerformed(evt);
+            }
+        });
 
         btnIncluir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icones/iconeAdd.png"))); // NOI18N
         btnIncluir.setText("incluir");
+        btnIncluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIncluirActionPerformed(evt);
+            }
+        });
 
         txtResponsavel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -242,10 +268,56 @@ public class TelaMaquinasManutencoes extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_BoxTipoActionPerformed
 
     private void btnExcluir1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluir1ActionPerformed
+// TODO add your handling code here:
+        String idManutencao = txtIdManutencao.getText();
+
+        if (idManutencao.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "O campo ID não pode estar vazio!", "Erro", JOptionPane.ERROR_MESSAGE);
+        } else {
+            ManutencoesDTO objManutencoesDTO = new ManutencoesDTO();
+            objManutencoesDTO.setIdManutencao(Integer.parseInt(idManutencao)); // Altere para setIdUsuario se necessário
+
+            ManutencoesDAO objManutencoesDAO = new ManutencoesDAO();
+            objManutencoesDAO.excluir(objManutencoesDTO); // Chama o método de exclusão
+
+        }
+            
+
+
         // TODO add your handling code here:
     }//GEN-LAST:event_btnExcluir1ActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+
+           // TODO add your handling code here:
+// Botão editar (adaptado para a classe UsuarioDAO)
+
+   
+    int id_maquina = Integer.parseInt(txtIdMaquina.getText());
+    String tipo = BoxTipo.getSelectedItem().toString();
+        String data = txtData.getText();
+        String descricao = txtDescricao.getText();
+        String responsavel = txtResponsavel.getText();
+        String status = BoxStatus.getSelectedItem().toString();
+
+
+ ManutencoesDTO objManutencoesDTO = new ManutencoesDTO();
+        
+   
+        objManutencoesDTO.setIdMaquina(id_maquina);
+        objManutencoesDTO.setTipo(tipo);
+        objManutencoesDTO.setData(data);
+        objManutencoesDTO.setDescricao(descricao);
+        objManutencoesDTO.setStatus(status);
+        objManutencoesDTO.setResponsavel(responsavel);
+      
+// Instância do UsuarioDAO
+ManutencoesDAO objManutencoesDAO = new ManutencoesDAO();
+objManutencoesDAO.editar(objManutencoesDTO); // Chama o método para editar no UsuarioDAO
+        
+    
+        
+
         // TODO add your handling code here:
     }//GEN-LAST:event_btnEditarActionPerformed
 
@@ -257,10 +329,123 @@ public class TelaMaquinasManutencoes extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtResponsavelActionPerformed
 
+    private void btnPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisarActionPerformed
+          // Chamada do método Pesquisar
+
+// Obtém o ID do campo de texto
+int idManutencoes = Integer.parseInt(txtIdManutencao.getText());
+
+// Cria uma instância do DAO
+ManutencoesDAO ManutencoesDAO = new ManutencoesDAO();
+// Chama o método pesquisar e obtém o resultado
+ManutencoesDTO ManutencoesDTO = ManutencoesDAO.pesquisarUsuario(idManutencoes);
+
+if (ManutencoesDTO != null) {
+    // Preenche os campos com os dados do cliente encontrado
+    txtIdMaquina.setText(String.valueOf(ManutencoesDTO.getIdMaquina()));
+    BoxTipo.setSelectedItem(ManutencoesDTO.getTipo()); // Define o perfil na JComboBox
+    BoxStatus.setSelectedItem(ManutencoesDTO.getStatus()); // Define o perfil na JComboBox
+    txtResponsavel.setText(ManutencoesDTO.getResponsavel());
+    txtData.setText(ManutencoesDTO.getData());
+    txtDescricao.setText(ManutencoesDTO.getDescricao());
+} else {
+    // Mostra uma mensagem de erro se o cliente não for encontrado
+    JOptionPane.showMessageDialog(null, "Manutenção não cadastrada!");
+
+    // Método para apagar os campos
+    ManutencoesDAO.limpar();
+}
+
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnPesquisarActionPerformed
+
+    private void btnIncluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIncluirActionPerformed
+        
+                                          
+    try {
+        if (txtIdManutencao.getText().isEmpty() 
+                || txtIdMaquina.getText().isEmpty()
+                || BoxTipo.getSelectedItem() == null
+                || txtData.getText().isEmpty()
+                || txtDescricao.getText().isEmpty()
+                || txtResponsavel.getText().isEmpty()
+                || BoxStatus.getSelectedItem() == null) {
+            JOptionPane.showMessageDialog(null, "Por favor, preencha todos os campos obrigatórios!");
+            return;
+        }
+
+         // Conversão do ID da máquina para int
+    int id_maquina;
+    try {
+        id_maquina = Integer.parseInt(txtIdMaquina.getText());
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(null, "O campo ID Máquina deve ser um número inteiro!");
+        return;
+    }
+        
+        
+        // Obtém os dados dos campos
+        
+        /*String id_maquina = txtIdMaquina.getText();
+        String id_lab = txtIdLab.getText();*/
+        
+        String tipo = BoxTipo.getSelectedItem().toString();
+        String data = txtData.getText();
+        String descricao = txtDescricao.getText();
+        String responsavel = txtResponsavel.getText();
+        String status = BoxStatus.getSelectedItem().toString();
+
+        
+        
+        
+        // Criação do objeto UsuarioDTO
+       ManutencoesDTO objManutencoesDTO = new ManutencoesDTO();
+        
+        /*objMaquin asDTO.setIdMaquina(id_maquina);
+        objMaquinasDTO.setIdLab(id_lab);*/
+        
+        objManutencoesDTO.setIdMaquina(id_maquina);
+        objManutencoesDTO.setTipo(tipo);
+        objManutencoesDTO.setData(data);
+        objManutencoesDTO.setDescricao(descricao);
+        objManutencoesDTO.setStatus(status);
+        objManutencoesDTO.setResponsavel(responsavel);
+      
+        // Instância do UsuarioDAO para inserir
+        ManutencoesDAO objManutencoesDAO = new ManutencoesDAO();
+        objManutencoesDAO.inserirUsuario(objManutencoesDTO);
+
+        // Limpa os campos após a inserção
+        objManutencoesDAO.limpar();
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "Erro ao incluir manutenção: " + e.getMessage());
+    }
+
+        
+      
+
+        
+
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnIncluirActionPerformed
+
+    private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
+
+          //metodo botao limpar
+          
+       ManutencoesDAO objManutencoesDAO = new ManutencoesDAO();       
+            objManutencoesDAO.limpar();
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnLimparActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> BoxStatus;
-    private javax.swing.JComboBox<String> BoxTipo;
+    public static javax.swing.JComboBox<String> BoxStatus;
+    public static javax.swing.JComboBox<String> BoxTipo;
     private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnExcluir1;
     private javax.swing.JButton btnIncluir;
@@ -277,10 +462,10 @@ public class TelaMaquinasManutencoes extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tableManutencoes;
-    private javax.swing.JTextField txtData;
-    private javax.swing.JTextField txtDescricao;
-    private javax.swing.JTextField txtIdManutencao;
-    private javax.swing.JTextField txtIdMaquina;
-    private javax.swing.JTextField txtResponsavel;
+    public static javax.swing.JTextField txtData;
+    public static javax.swing.JTextField txtDescricao;
+    public static javax.swing.JTextField txtIdManutencao;
+    public static javax.swing.JTextField txtIdMaquina;
+    public static javax.swing.JTextField txtResponsavel;
     // End of variables declaration//GEN-END:variables
 }
