@@ -180,6 +180,7 @@ CREATE TABLE pecas (
 CREATE TABLE manutencoes (
     id_manutencao INT PRIMARY KEY AUTO_INCREMENT,
     id_maquina INT,
+    respomsavel VARCHAR(100),
     tipo ENUM('preventiva', 'corretiva') NOT NULL,
     data_manutencao DATE NOT NULL,
     descricao TEXT,
@@ -224,16 +225,15 @@ ALTER TABLE maquinas
 DROP COLUMN data_aquisicao;
 
 
-
-select  from usuarios;
-select  from maquinas;
+select * from usuarios;
+select * from maquinas;
 
 
 -- Adicionando dados em tabelas
 INSERT INTO laboratorios (id_laboratorio,nome,localizacao)
 values (1,'teste','teste');
-select  from laboratorios;
-select  from maquinas;
+select * from laboratorios;
+select * from maquinas;
 INSERT INTO laboratorios (id_laboratorio,nome,localizacao)
 values (2,'teste','teste');
 
@@ -244,5 +244,10 @@ values (2, 'teste', 2, 'intel', '8gb', '528gb', 'funcionando');
 
 INSERT INTO pecas (id_peca, nome, tipo, fabricante, quantidade)
 values (1, 'teste', 'teste', 'tetse', 8);
+
+INSERT INTO manutencoes (id_manutencao, id_maquina, tipo, data_manutencao, descricao, status,responsavel)
+values (2, 1,'preventiva', '08/12/2024','descricao','funcionando','tecnico');
+
+select * from manutencoes;
 
 ```
