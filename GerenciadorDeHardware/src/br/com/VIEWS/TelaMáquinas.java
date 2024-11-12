@@ -414,31 +414,27 @@ public class TelaMáquinas extends javax.swing.JInternalFrame {
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
           // TODO add your handling code here:
-// Botão editar (adaptado para a classe UsuarioDAO)
-int id_lab = Integer.parseInt(txtIdLab.getText());
-   String nome_maquina = txtNome.getText();
-        String cpu_maquina = txtCPU.getText();
-        String ram_maquina = txtRAM.getText();
-        String armazenamneto_maquina = txtArmazenamento.getText();
-        String status_maquina = BoxStaus.getSelectedItem().toString();
+ int id_lab = Integer.parseInt(txtIdLab.getText());
+    String nome_maquina = txtNome.getText();
+    String cpu_maquina = txtCPU.getText();
+    String ram_maquina = txtRAM.getText();
+    String armazenamento_maquina = txtArmazenamento.getText();
+    String status_maquina = BoxStaus.getSelectedItem().toString();
+    int id_maquina = Integer.parseInt(txtIdMaquina.getText()); // ID da máquina para a condição WHERE
 
+    // Criação do objeto MaquinasDTO
+    MaquinasDTO objMaquinasDTO = new MaquinasDTO();
+    objMaquinasDTO.setIdLab(id_lab);
+    objMaquinasDTO.setNome(nome_maquina);
+    objMaquinasDTO.setCpu(cpu_maquina);
+    objMaquinasDTO.setRam(ram_maquina);
+    objMaquinasDTO.setArmazenamento(armazenamento_maquina);
+    objMaquinasDTO.setStatus(status_maquina);
+    objMaquinasDTO.setIdMaquina(id_maquina); // Setar o id_maquina para o WHERE
 
- MaquinasDTO objMaquinasDTO = new MaquinasDTO();
-        
-   
-        objMaquinasDTO.setIdLab(id_lab);
-        
-        objMaquinasDTO.setNome(nome_maquina);
-        objMaquinasDTO.setCpu(cpu_maquina);
-        objMaquinasDTO.setRam(ram_maquina);
-        objMaquinasDTO.setArmazenamento(armazenamneto_maquina);
-        objMaquinasDTO.setStatus(status_maquina);
-
-// Instância do UsuarioDAO
-MaquinasDAO objMaquinasDAO = new MaquinasDAO();
-objMaquinasDAO.editar(objMaquinasDTO); // Chama o método para editar no UsuarioDAO
-        
-    
+    // Instância do MaquinasDAO e chamada ao método editar
+    MaquinasDAO objMaquinasDAO = new MaquinasDAO();
+    objMaquinasDAO.editar(objMaquinasDTO);
         
     }//GEN-LAST:event_btnEditarActionPerformed
 

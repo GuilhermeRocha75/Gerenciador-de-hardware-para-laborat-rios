@@ -5,6 +5,8 @@
  */
 package br.com.VIEWS;
 
+import br.com.DAO.MaquinasDAO;
+
 /**
  *
  * @author aluno.saolucas
@@ -16,6 +18,10 @@ public class TelaPrincipal extends javax.swing.JFrame {
      */
     public TelaPrincipal() {
         initComponents();
+        
+        
+        MaquinasDAO maquinasDAO = new MaquinasDAO();
+    maquinasDAO.carregarMaquinasNaTabela(TablePrincipal); // onde tabelaMaquinas é o seu JTable
     }
 
     /**
@@ -86,7 +92,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         jScrollPane1.setViewportView(TablePrincipal);
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
-        jLabel1.setText("Status de Máquinas do laboratório");
+        jLabel1.setText("Status de Máquinas dos laboratórios");
 
         DesktopPrincipal.setLayer(jScrollPane1, javax.swing.JLayeredPane.DEFAULT_LAYER);
         DesktopPrincipal.setLayer(jLabel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
@@ -97,12 +103,12 @@ public class TelaPrincipal extends javax.swing.JFrame {
             DesktopPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(DesktopPrincipalLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 690, Short.MAX_VALUE)
                 .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, DesktopPrincipalLayout.createSequentialGroup()
-                .addContainerGap(141, Short.MAX_VALUE)
+            .addGroup(DesktopPrincipalLayout.createSequentialGroup()
+                .addGap(137, 137, 137)
                 .addComponent(jLabel1)
-                .addGap(138, 138, 138))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         DesktopPrincipalLayout.setVerticalGroup(
             DesktopPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -239,7 +245,9 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        // TODO add your handling code here:
+                 TelaLaboratorios tLab = new TelaLaboratorios();
+        tLab.setVisible(true);
+        DesktopPrincipal.add(tLab);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
@@ -260,7 +268,11 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-        // TODO add your handling code here:
+                //chamar tela usuario
+        TelaPecasManutencao tUsuario = new TelaPecasManutencao();
+        tUsuario.setVisible(true);
+         DesktopPrincipal.add(tUsuario);
+       
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     /**
@@ -301,7 +313,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDesktopPane DesktopPrincipal;
     public static javax.swing.JMenuBar MenuRel;
-    private javax.swing.JTable TablePrincipal;
+    public static javax.swing.JTable TablePrincipal;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;

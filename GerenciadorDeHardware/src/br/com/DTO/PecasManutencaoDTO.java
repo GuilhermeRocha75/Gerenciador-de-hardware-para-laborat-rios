@@ -2,10 +2,10 @@
 package br.com.DTO;
 
 
-public class PecasManutrencaoDTO {
+public class PecasManutencaoDTO {
  
-      private int idPecaManutencao, idPeca, idManutencao;
-      private String quantidade;
+      private int idPecaManutencao, idPeca, idManutencao,  quantidade;;
+      
 
     public int getIdPecaManutencao() {
         return idPecaManutencao;
@@ -31,13 +31,14 @@ public class PecasManutrencaoDTO {
         this.idManutencao = idManutencao;
     }
 
-    public String getQuantidade() {
+    public int getQuantidade() {
         return quantidade;
     }
 
-    public void setQuantidade(String quantidade) {
+    public void setQuantidade(int quantidade) {
         this.quantidade = quantidade;
     }
+
       
       
     

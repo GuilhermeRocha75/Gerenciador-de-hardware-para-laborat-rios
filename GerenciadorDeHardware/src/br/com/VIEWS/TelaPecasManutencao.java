@@ -5,6 +5,10 @@
  */
 package br.com.VIEWS;
 
+import br.com.DAO.PecasManutencaoDAO;
+import br.com.DTO.PecasManutencaoDTO;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author aluno.saolucas
@@ -16,6 +20,10 @@ public class TelaPecasManutencao extends javax.swing.JInternalFrame {
      */
     public TelaPecasManutencao() {
         initComponents();
+        
+        PecasManutencaoDAO maquinasDAO = new PecasManutencaoDAO();
+    maquinasDAO.carregarTabela(tablePecasDeManutancao); // onde tabelaMaquinas é o seu JTable
+    
     }
 
     /**
@@ -44,6 +52,9 @@ public class TelaPecasManutencao extends javax.swing.JInternalFrame {
         txtIdPecaManutencao = new javax.swing.JTextField();
         txtQuantidade = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
+
+        setClosable(true);
+        setOpaque(false);
 
         jLabel3.setText("ID peça de  manutenção:");
 
@@ -92,12 +103,27 @@ public class TelaPecasManutencao extends javax.swing.JInternalFrame {
 
         btnPesquisar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icones/iconePesquisar.png"))); // NOI18N
         btnPesquisar.setText("Pesquisar");
+        btnPesquisar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPesquisarActionPerformed(evt);
+            }
+        });
 
         btnLimpar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icones/iconeLimpar.png"))); // NOI18N
         btnLimpar.setText("Limpar");
+        btnLimpar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimparActionPerformed(evt);
+            }
+        });
 
         btnIncluir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icones/iconeAdd.png"))); // NOI18N
         btnIncluir.setText("incluir");
+        btnIncluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIncluirActionPerformed(evt);
+            }
+        });
 
         jLabel2.setText("Peça para manutenção:");
 
@@ -108,8 +134,15 @@ public class TelaPecasManutencao extends javax.swing.JInternalFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(12, Short.MAX_VALUE)
+                .addContainerGap(22, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(btnPesquisar)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnLimpar)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnIncluir)
+                        .addGap(64, 64, 64))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addGap(227, 227, 227))
@@ -133,19 +166,10 @@ public class TelaPecasManutencao extends javax.swing.JInternalFrame {
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(42, 42, 42))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(50, 50, 50)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnIncluir)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnLimpar)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnPesquisar))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(71, 71, 71)
-                                .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnExcluir1)))
+                        .addGap(110, 110, 110)
+                        .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnExcluir1)
                         .addContainerGap())))
         );
         layout.setVerticalGroup(
@@ -190,11 +214,122 @@ public class TelaPecasManutencao extends javax.swing.JInternalFrame {
 
     private void btnExcluir1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluir1ActionPerformed
         // TODO add your handling code here:
+            String idPecas = txtIdPecaManutencao.getText();
+
+        if (idPecas.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "O campo ID não pode estar vazio!", "Erro", JOptionPane.ERROR_MESSAGE);
+        } else {
+            PecasManutencaoDTO objPecasDTO = new PecasManutencaoDTO();
+            objPecasDTO.setIdPecaManutencao(Integer.parseInt(idPecas)); // Altere para setIdUsuario se necessário
+
+            PecasManutencaoDAO objPecasDAO = new PecasManutencaoDAO();
+            objPecasDAO.excluir(objPecasDTO); // Chama o método de exclusão
+
+        }
+        
     }//GEN-LAST:event_btnExcluir1ActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        // TODO add your handling code here:
+  int id_manutencao = Integer.parseInt(txtIdManutencao.getText());
+    int id_peca = Integer.parseInt(txtIdpeca.getText());
+    int quantidade = Integer.parseInt(txtQuantidade.getText());
+    int id_peca_manutencao = Integer.parseInt(txtIdPecaManutencao.getText()); // ID da peça para a condição WHERE
+
+    // Criação do objeto PecasManutencaoDTO
+    PecasManutencaoDTO objPecasDTO = new PecasManutencaoDTO();
+    objPecasDTO.setIdManutencao(id_manutencao); // Atribuir ao campo correto
+    objPecasDTO.setIdPeca(id_peca);             // Atribuir ao campo correto
+    objPecasDTO.setQuantidade(quantidade);
+    objPecasDTO.setIdPecaManutencao(id_peca_manutencao); // Setar o id_peca_manutencao para o WHERE
+
+    // Instância do PecasManutencaoDAO e chamada ao método editar
+    PecasManutencaoDAO objPecasDAO = new PecasManutencaoDAO();
+    objPecasDAO.editar(objPecasDTO); // Chama o método para editar no PecasManutencaoDA
     }//GEN-LAST:event_btnEditarActionPerformed
+
+    private void btnPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisarActionPerformed
+      // Chamada do método Pesquisar
+
+        // Obtém o ID do campo de texto
+        int idPecasManu = Integer.parseInt(txtIdPecaManutencao.getText());
+
+        // Cria uma instância do DAO
+        PecasManutencaoDAO PecasDAO = new PecasManutencaoDAO();
+        // Chama o método pesquisar e obtém o resultado
+        PecasManutencaoDTO PecasDTO = PecasDAO.pesquisarUsuario(idPecasManu);
+
+        if (PecasDTO != null) {
+            // Preenche os campos com os dados do cliente encontrado
+           
+          
+               txtIdpeca.setText(String.valueOf(PecasDTO.getIdPeca())); // Converte o ID para String
+               txtIdManutencao.setText(String.valueOf(PecasDTO.getIdManutencao())); // Converte o ID para String
+               txtQuantidade.setText(String.valueOf(PecasDTO.getQuantidade())); // Converte o ID para String
+        } else {
+            // Mostra uma mensagem de erro se o cliente não for encontrado
+            JOptionPane.showMessageDialog(null, "Peça de manutenção não cadastrada!");
+
+            // Método para apagar os campos
+            PecasDAO.limpar();
+        }
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnPesquisarActionPerformed
+
+    private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
+   //metodo botao limpar
+
+        PecasManutencaoDAO objPecasDAO = new PecasManutencaoDAO();
+        objPecasDAO.limpar();
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnLimparActionPerformed
+
+    private void btnIncluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIncluirActionPerformed
+
+                                                  
+    try {
+        if (txtIdManutencao.getText().isEmpty() || txtIdpeca.getText().isEmpty() || txtQuantidade.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Por favor, preencha todos os campos obrigatórios!");
+            return;
+        }
+
+        // Obtém os dados dos campos
+        // Conversão do ID da máquina para int
+    int idManutencao;
+    int idPeca;
+    int quantidade;
+    try {
+        idManutencao = Integer.parseInt(txtIdManutencao.getText());
+        idPeca = Integer.parseInt(txtIdpeca.getText());
+        quantidade = Integer.parseInt(txtQuantidade.getText());
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(null, "Os campos devem estar preenchidos com um número inteiro!");
+        return;
+    }
+        
+
+        // Criação do objeto UsuarioDTO
+        PecasManutencaoDTO objPecasManuDTO = new PecasManutencaoDTO();
+        objPecasManuDTO.setIdManutencao(idManutencao);
+        objPecasManuDTO.setIdPeca(idPeca);
+        objPecasManuDTO.setQuantidade(quantidade);
+       
+        
+        // Instância do UsuarioDAO para inserir
+        PecasManutencaoDAO objPecasDAO = new PecasManutencaoDAO();
+        objPecasDAO.inserirUsuario(objPecasManuDTO);
+
+        // Limpa os campos após a inserção
+        objPecasDAO.limpar();
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "Erro ao inserir peça de manutenção: " + e.getMessage());
+    }
+
+
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnIncluirActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -210,10 +345,10 @@ public class TelaPecasManutencao extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tablePecasDeManutancao;
-    private javax.swing.JTextField txtIdManutencao;
-    private javax.swing.JTextField txtIdPecaManutencao;
-    private javax.swing.JTextField txtIdpeca;
-    private javax.swing.JTextField txtQuantidade;
+    public static javax.swing.JTable tablePecasDeManutancao;
+    public static javax.swing.JTextField txtIdManutencao;
+    public static javax.swing.JTextField txtIdPecaManutencao;
+    public static javax.swing.JTextField txtIdpeca;
+    public static javax.swing.JTextField txtQuantidade;
     // End of variables declaration//GEN-END:variables
 }

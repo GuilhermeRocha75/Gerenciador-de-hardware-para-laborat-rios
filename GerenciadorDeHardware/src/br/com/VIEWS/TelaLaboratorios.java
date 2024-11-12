@@ -5,6 +5,11 @@
  */
 package br.com.VIEWS;
 
+import br.com.DAO.LaboratoriosDAO;
+import br.com.DTO.LaboratorioDTO;
+import br.com.DTO.PecasManutencaoDTO;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author aluno.saolucas
@@ -16,6 +21,18 @@ public class TelaLaboratorios extends javax.swing.JInternalFrame {
      */
     public TelaLaboratorios() {
         initComponents();
+        
+       LaboratoriosDAO maquinasDAO = new LaboratoriosDAO();
+    maquinasDAO.carregarTabela(tableLab); // onde tabelaMaquinas é o seu JTable
+    
+    
+    try {
+        // Tenta trazer a tela para frente ao abrir
+        this.setSelected(true);
+    } catch (java.beans.PropertyVetoException e) {
+        JOptionPane.showMessageDialog(this, "Erro ao tentar destacar a tela: " + e.getMessage());
+    }
+    
     }
 
     /**
@@ -29,23 +46,25 @@ public class TelaLaboratorios extends javax.swing.JInternalFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tableLab = new javax.swing.JTable();
         txtIdLab = new javax.swing.JTextField();
         txtNomeLab = new javax.swing.JTextField();
         txtLocalizacaoLab = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        btnExcluir1 = new javax.swing.JButton();
         btnEditar = new javax.swing.JButton();
         btnPesquisar = new javax.swing.JButton();
         btnLimpar = new javax.swing.JButton();
         btnIncluir = new javax.swing.JButton();
+        btnExcluir1 = new javax.swing.JButton();
+
+        setClosable(true);
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         jLabel1.setText("Laboratórios cadastrados");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tableLab.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
                 {null, null, null},
@@ -56,7 +75,7 @@ public class TelaLaboratorios extends javax.swing.JInternalFrame {
                 "ID", "Nome", "Localização"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tableLab);
 
         txtIdLab.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -85,14 +104,6 @@ public class TelaLaboratorios extends javax.swing.JInternalFrame {
         jLabel4.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         jLabel4.setText("Localização:");
 
-        btnExcluir1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icones/IconeExcluir.png"))); // NOI18N
-        btnExcluir1.setText("excluir");
-        btnExcluir1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnExcluir1ActionPerformed(evt);
-            }
-        });
-
         btnEditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icones/iconeEditar.png"))); // NOI18N
         btnEditar.setText("editar");
         btnEditar.addActionListener(new java.awt.event.ActionListener() {
@@ -103,17 +114,46 @@ public class TelaLaboratorios extends javax.swing.JInternalFrame {
 
         btnPesquisar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icones/iconePesquisar.png"))); // NOI18N
         btnPesquisar.setText("Pesquisar");
+        btnPesquisar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPesquisarActionPerformed(evt);
+            }
+        });
 
         btnLimpar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icones/iconeLimpar.png"))); // NOI18N
         btnLimpar.setText("Limpar");
+        btnLimpar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimparActionPerformed(evt);
+            }
+        });
 
         btnIncluir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icones/iconeAdd.png"))); // NOI18N
         btnIncluir.setText("incluir");
+        btnIncluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIncluirActionPerformed(evt);
+            }
+        });
+
+        btnExcluir1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icones/IconeExcluir.png"))); // NOI18N
+        btnExcluir1.setText("excluir");
+        btnExcluir1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExcluir1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(239, 239, 239)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(txtIdLab, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(245, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addGap(58, 58, 58)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -123,6 +163,18 @@ public class TelaLaboratorios extends javax.swing.JInternalFrame {
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                    .addComponent(btnPesquisar)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(btnLimpar)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(btnIncluir))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGap(84, 84, 84)
+                                    .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(btnExcluir1)))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -138,27 +190,6 @@ public class TelaLaboratorios extends javax.swing.JInternalFrame {
                                 .addGap(35, 35, 35)
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 410, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 0, Short.MAX_VALUE))))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(239, 239, 239)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(txtIdLab, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(245, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnIncluir)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnLimpar)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnPesquisar))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(71, 71, 71)
-                        .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnExcluir1)))
-                .addGap(43, 43, 43))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -206,13 +237,117 @@ public class TelaLaboratorios extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNomeLabActionPerformed
 
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        int id_lab = Integer.parseInt(txtIdLab.getText());
+        
+          String nome = txtNomeLab.getText();
+          String loc = txtLocalizacaoLab.getText();
+
+        // Criação do objeto PecasManutencaoDTO
+        LaboratorioDTO objLabDTO = new LaboratorioDTO();
+        objLabDTO.setIdLab(id_lab); // Atribuir ao campo correto
+        objLabDTO.setNome(nome); // Atribuir ao campo correto
+        objLabDTO.setLocalizacao(loc); // Atribuir ao campo correto
+       
+        // Instância do PecasManutencaoDAO e chamada ao método editar
+        LaboratoriosDAO objLabDAO = new LaboratoriosDAO();
+        objLabDAO.editar(objLabDTO); // Chama o método para editar no PecasManutencaoDA
+    }//GEN-LAST:event_btnEditarActionPerformed
+
+    private void btnPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisarActionPerformed
+        // Chamada do método Pesquisar
+
+        // Obtém o ID do campo de texto
+        int idLab = Integer.parseInt(txtIdLab.getText());
+
+        // Cria uma instância do DAO
+        LaboratoriosDAO LabDAO = new LaboratoriosDAO();
+        // Chama o método pesquisar e obtém o resultado
+        LaboratorioDTO LabDTO = LabDAO.pesquisarUsuario(idLab);
+
+        if (LabDTO != null) {
+            // Preenche os campos com os dados do cliente encontrado
+
+            txtNomeLab.setText(LabDTO.getNome());
+            txtLocalizacaoLab.setText(LabDTO.getLocalizacao());
+        } else {
+            // Mostra uma mensagem de erro se o cliente não for encontrado
+            JOptionPane.showMessageDialog(null, "laboratorio não cadastrado!");
+
+            // Método para apagar os campos
+            LabDAO.limpar();
+        }
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnPesquisarActionPerformed
+
+    private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
+        //metodo botao limpar
+
+       LaboratoriosDAO objLabDAO = new LaboratoriosDAO();
+        objLabDAO.limpar();
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnLimparActionPerformed
+
+    private void btnIncluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIncluirActionPerformed
+
+        try {
+            if (txtNomeLab.getText().isEmpty() || txtLocalizacaoLab.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Por favor, preencha todos os campos obrigatórios!");
+                return;
+            }
+
+            // Obtém os dados dos campos
+            // Conversão do ID da máquina para int
+            int idLab;
+          
+            try {
+                idLab = Integer.parseInt(txtIdLab.getText());
+               
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Os campos devem estar preenchidos com um número inteiro!");
+                return;
+            }
+            
+                 String nome = txtNomeLab.getText();
+             String loc = txtLocalizacaoLab.getText();
+            
+            // Criação do objeto UsuarioDTO
+            LaboratorioDTO objLabDTO = new LaboratorioDTO();
+            objLabDTO.setIdLab(idLab);
+            objLabDTO.setNome(nome);
+            objLabDTO.setLocalizacao(loc);
+            
+            // Instância do UsuarioDAO para inserir
+            LaboratoriosDAO objLabDAO = new LaboratoriosDAO();
+            objLabDAO.inserirUsuario(objLabDTO);
+
+            // Limpa os campos após a inserção
+            objLabDAO.limpar();
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Erro ao inserir laboratório: " + e.getMessage());
+        }
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnIncluirActionPerformed
+
     private void btnExcluir1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluir1ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnExcluir1ActionPerformed
+        String idLab = txtIdLab.getText();
 
-    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnEditarActionPerformed
+        if (idLab.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "O campo ID não pode estar vazio!", "Erro", JOptionPane.ERROR_MESSAGE);
+        } else {
+            LaboratorioDTO objLabDTO = new LaboratorioDTO();
+            objLabDTO.setIdLab(Integer.parseInt(idLab)); // Altere para setIdUsuario se necessário
+
+            LaboratoriosDAO objLabDAO = new LaboratoriosDAO();
+            objLabDAO.excluir(objLabDTO); // Chama o método de exclusão
+
+        }
+
+    }//GEN-LAST:event_btnExcluir1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -226,9 +361,9 @@ public class TelaLaboratorios extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField txtIdLab;
-    private javax.swing.JTextField txtLocalizacaoLab;
-    private javax.swing.JTextField txtNomeLab;
+    private javax.swing.JTable tableLab;
+    public static javax.swing.JTextField txtIdLab;
+    public static javax.swing.JTextField txtLocalizacaoLab;
+    public static javax.swing.JTextField txtNomeLab;
     // End of variables declaration//GEN-END:variables
 }
