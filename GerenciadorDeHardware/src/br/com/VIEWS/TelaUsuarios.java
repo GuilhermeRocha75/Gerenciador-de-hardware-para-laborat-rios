@@ -5,19 +5,14 @@
  */
 package br.com.VIEWS;
 
-import br.com.DAO.ClienteDAO;
 import br.com.DAO.ConexaoDAO;
 import br.com.DAO.UsuarioDAO;
-import br.com.DTO.ClienteDTO;
 import br.com.DTO.UsuarioDTO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import javax.swing.JOptionPane;
-import static br.com.VIEWS.TelaMáquinas.txtIdMaquina;
-import static br.com.VIEWS.TelaMáquinas.txtCPU;
-import static br.com.VIEWS.TelaMáquinas.txtArmazenamento;
-import static br.com.VIEWS.TelaMáquinas.txtArmazenamento;
+
 
 /**
  *
@@ -26,51 +21,37 @@ import static br.com.VIEWS.TelaMáquinas.txtArmazenamento;
 public class TelaUsuarios extends javax.swing.JInternalFrame {
 
     
-     Connection conexao = null;
-   PreparedStatement pst = null;
-   ResultSet rs = null;
-    
+        
+    Connection conexao = null;
+    PreparedStatement pst = null;
+    ResultSet rs = null;
+
+    private UsuarioDAO usuariosDAO;  // Declaração da instância de UsuarioDAO
+   
+   
     /**
      * Creates new form TelaCliente
      */
     public TelaUsuarios() {
         initComponents();
         conexao = ConexaoDAO.conector();
+        usuariosDAO = new UsuarioDAO();  // Criação da instância de UsuarioDAO
     }
+    
+    // Método para verificar as permissões do usuário e habilitar/desabilitar os botões
+    public void verificarPermissoesUsuario(int idUsuario) {
+        String perfil = usuariosDAO.obterPerfilUsuario(idUsuario);  // Chama o método da DAO
+        
+        // Verifica se o perfil é estagiário ou técnico e desabilita os botões
+        boolean isRestricted = "estagiário".equalsIgnoreCase(perfil) || "técnico".equalsIgnoreCase(perfil);
+        
+        btnLimpar.setEnabled(!isRestricted);
+        btnIncluir.setEnabled(!isRestricted);
+        btnExcluir.setEnabled(!isRestricted);
+        // Desabilite outros botões conforme necessário
+    
 
-     public void pesquisar(){
-       // Método pesquisar
-String sql = "SELECT * FROM tb_clientes WHERE id_usuario = ?";
-try {
-    pst = conexao.prepareStatement(sql);
-    pst.setString(1, txtIdUsuario.getText());
-    rs = pst.executeQuery();
-
-    if (rs.next()) { 
-        txtNomeUsuario.setText(rs.getString(2));
-        boxPerfil.setSelectedItem(rs.getString(3)); // Define o perfil na JComboBox
-        txtSenha.setText(rs.getString(4));
-        txtEmail.setText(rs.getString(5));
-        txtData.setText(rs.getString(6));
-    } else {
-        JOptionPane.showMessageDialog(null, "Cliente não cadastrado!");
-        limpar();
-    }
-
-} catch (Exception e) {
-    JOptionPane.showMessageDialog(null, "Tela Usuário: " + e);
-}
-
-    }
-    public void limpar() {
-    TelaUsuarios.txtIdUsuario.setText(null);
-    TelaUsuarios.txtNomeUsuario.setText(null);
-    TelaUsuarios.boxPerfil.setSelectedIndex(-1);  // Limpa a seleção da JComboBox
-    TelaUsuarios.txtSenha.setText(null);
-    TelaUsuarios.txtEmail.setText(null);
-    TelaUsuarios.txtData.setText(null);
-}
-
+      }
     
     
     /**
@@ -331,8 +312,7 @@ try {
         UsuarioDAO objUsuarioDAO = new UsuarioDAO();
         objUsuarioDAO.inserirUsuario(objUsuarioDTO);
 
-        // Limpa os campos após a inserção
-        limpar();
+       
 
     } catch (Exception e) {
         JOptionPane.showMessageDialog(null, "Erro ao incluir usuário: " + e.getMessage());

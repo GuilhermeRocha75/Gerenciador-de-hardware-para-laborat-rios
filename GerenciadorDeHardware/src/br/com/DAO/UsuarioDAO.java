@@ -215,7 +215,25 @@ public void excluir(UsuarioDTO objUsuarioDTO) {
     }
 }
     
-    
+     // Método para obter o perfil de um usuário a partir do banco de dados
+    public String obterPerfilUsuario(int idUsuario) {
+        String perfil = "";
+        String sql = "SELECT Perfil FROM usuarios WHERE id_usuario = ?";
+        
+        try (Connection con = ConexaoDAO.conector();
+             PreparedStatement stmt = con.prepareStatement(sql)) {
+            
+            stmt.setInt(1, idUsuario);
+            ResultSet rs = stmt.executeQuery();
+            
+            if (rs.next()) {
+                perfil = rs.getString("perfil");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return perfil;
+    }
     
     
 }

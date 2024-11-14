@@ -6,6 +6,7 @@
 package br.com.VIEWS;
 
 import br.com.DAO.ConexaoDAO;
+import br.com.DAO.LaboratoriosDAO;
 import br.com.DAO.MaquinasDAO;
 import br.com.DAO.UsuarioDAO;
 import br.com.DTO.MaquinasDTO;
@@ -14,6 +15,7 @@ import br.com.DTO.UsuarioDTO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.List;
 import javax.swing.JOptionPane;
 
 /**
@@ -35,7 +37,10 @@ public class TelaMáquinas extends javax.swing.JInternalFrame {
         
         MaquinasDAO maquinasDAO = new MaquinasDAO();
     maquinasDAO.carregarMaquinasNaTabela(TabelaMaquinas); // onde tabelaMaquinas é o seu JTable
-        
+       
+    
+    
+    
         
         
     }

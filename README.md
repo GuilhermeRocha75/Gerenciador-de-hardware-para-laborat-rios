@@ -143,111 +143,245 @@ O sistema "Gerenciador de Hardware para Laboratórios" deve facilitar o controle
 ## CODIGO MYSQL:
 
 ```sql
-create database GerenciadorDeHardware;
-use GerenciadorDeHardware;
 
--- Tabela laboratorios
-CREATE TABLE laboratorios (
-    id_laboratorio INT PRIMARY KEY AUTO_INCREMENT,
-    nome VARCHAR(100) NOT NULL,
-    localizacao VARCHAR(255)
-);
+package br.com.DAO;
 
-
-
--- Tabela maquinas
-CREATE TABLE maquinas (
-    id_maquina INT PRIMARY KEY AUTO_INCREMENT,
-    nome VARCHAR(100) NOT NULL,
-    id_laboratorio INT,
-    cpu VARCHAR(100),
-    ram VARCHAR(50),
-    armazenamento VARCHAR(50),
-    status ENUM('funcionando', 'em manutencao', 'fora de uso') DEFAULT 'funcionando',
-    FOREIGN KEY (id_laboratorio) REFERENCES laboratorios(id_laboratorio)
-);
-
--- Tabela pecas
-CREATE TABLE pecas (
-    id_peca INT PRIMARY KEY AUTO_INCREMENT,
-    nome VARCHAR(100) NOT NULL,
-    tipo VARCHAR(50),
-    fabricante VARCHAR(100),
-    quantidade INT DEFAULT 0
-);
-
--- Tabela manutencoes
-CREATE TABLE manutencoes (
-    id_manutencao INT PRIMARY KEY AUTO_INCREMENT,
-    id_maquina INT,
-    respomsavel VARCHAR(100),
-    tipo ENUM('preventiva', 'corretiva') NOT NULL,
-    data_manutencao DATE NOT NULL,
-    descricao TEXT,
-    status ENUM('agendada', 'concluida', 'cancelada') DEFAULT 'agendada',
-    FOREIGN KEY (id_maquina) REFERENCES maquinas(id_maquina)
-);
-
--- Tabela pecas_manutencao (associação entre pecas e manutencoes)
-CREATE TABLE pecas_manutencao (
-    id_peca_manutencao INT PRIMARY KEY AUTO_INCREMENT,
-    id_manutencao INT,
-    id_peca INT,
-    quantidade INT DEFAULT 1,
-    FOREIGN KEY (id_manutencao) REFERENCES manutencoes(id_manutencao),
-    FOREIGN KEY (id_peca) REFERENCES pecas(id_peca)
-);
-
--- Tabela usuarios
-CREATE TABLE usuarios (
-    id_usuario INT PRIMARY KEY AUTO_INCREMENT,
-    nome VARCHAR(100) NOT NULL,
-    email VARCHAR(100) UNIQUE NOT NULL,
-    senha VARCHAR(255) NOT NULL,
-    perfil ENUM('tecnico', 'administrador') DEFAULT 'tecnico',
-    data_cadastro DATE DEFAULT (NOW())
-);
-
--- Tabela logs_acoes
-CREATE TABLE logs_acoes (
-    id_log INT PRIMARY KEY AUTO_INCREMENT,
-    id_usuario INT,
-    acao VARCHAR(255) NOT NULL,
-    data_hora DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario)
-);
-
--- atualizações tabelas
-ALTER TABLE manutencoes
-ADD COLUMN responsavel VARCHAR(100) NOT NULL;
-
-ALTER TABLE maquinas
-DROP COLUMN data_aquisicao;
+import br.com.DTO.UsuarioDTO;
+import br.com.VIEWS.TelaPrincipal;
+import br.com.VIEWS.TelaMáquinas;
+import br.com.VIEWS.TelaUsuarios;
+import java.awt.Color;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JOptionPane;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
-select * from usuarios;
-select * from maquinas;
+public class UsuarioDAO {
+   
+    
+    Connection conexao = null;
+    PreparedStatement pst = null;
+    ResultSet rs = null;
+    
+    // Método para verificar login
+    public boolean logar(String login, String senha) {
+        String sql = "SELECT * FROM usuarios WHERE nome = ? AND senha = ?";
+        conexao = new ConexaoDAO().conector(); // Conecta ao banco de dados
 
+        try {
+            pst = conexao.prepareStatement(sql);
+            pst.setString(1, login);
+            pst.setString(2, senha);
 
--- Adicionando dados em tabelas
-INSERT INTO laboratorios (id_laboratorio,nome,localizacao)
-values (1,'teste','teste');
-select * from laboratorios;
-select * from maquinas;
-INSERT INTO laboratorios (id_laboratorio,nome,localizacao)
-values (2,'teste','teste');
+            rs = pst.executeQuery();
 
-INSERT INTO maquinas (id_maquina, nome, id_laboratorio, cpu, ram, armazenamento, status)
-values (1, 'teste', 1, 'intel', '8gb', '528gb', 'funcionando');
-INSERT INTO maquinas (id_maquina, nome, id_laboratorio, cpu, ram, armazenamento, status)
-values (2, 'teste', 2, 'intel', '8gb', '528gb', 'funcionando');
+            if (rs.next()) {
+                // Login e senha corretos
+                return true;
+            }
 
-INSERT INTO pecas (id_peca, nome, tipo, fabricante, quantidade)
-values (1, 'teste', 'teste', 'tetse', 8);
+            rs.close();
+            pst.close();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Erro no login: " + e);
+        }
 
-INSERT INTO manutencoes (id_manutencao, id_maquina, tipo, data_manutencao, descricao, status,responsavel)
-values (2, 1,'preventiva', '08/12/2024','descricao','funcionando','tecnico');
+        return false; // Login ou senha inválidos
+    }
+   
+   
+   
+     public void limpar(){
+         TelaUsuarios.txtIdUsuario.setText(null);
+         TelaUsuarios.txtNomeUsuario.setText(null);
+         TelaUsuarios.boxPerfil.setSelectedIndex(-1);
+         TelaUsuarios.txtSenha.setText(null);
+         TelaUsuarios.txtEmail.setText(null);
+         TelaUsuarios.txtData.setText(null);
+    }
+    
+    
+     //Metodo pesquisar
+    public UsuarioDTO pesquisarUsuario(int idUsuario) {
+        String sql = "SELECT * FROM usuarios WHERE id_usuario = ?";
+        conexao = new ConexaoDAO().conector();
+        UsuarioDTO usuarioDTO = null;
 
-select * from manutencoes;
+        try {
+            pst = conexao.prepareStatement(sql);
+            pst.setInt(1, idUsuario);
+            rs = pst.executeQuery();
+
+            // Se encontrar um usuário, cria o objeto UsuarioDTO com os dados
+            if (rs.next()) {
+                usuarioDTO = new UsuarioDTO();
+                usuarioDTO.setIdUsuario(rs.getInt("id_usuario"));
+                usuarioDTO.setNomeUsuario(rs.getString("nome"));
+                usuarioDTO.setPerfilUsuario(rs.getString("perfil"));
+                usuarioDTO.setEmailUsuario(rs.getString("email"));
+                usuarioDTO.setSenhaUsuario(rs.getString("senha"));
+                usuarioDTO.setDataCadastro(rs.getString("data_cadastro"));
+            }
+
+            rs.close();
+            pst.close();
+            
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Erro ao pesquisar usuário: " + e);
+        }
+
+        return usuarioDTO;
+       
+    }
+    
+    //Metodo inserir/adicionar usuarios
+public void inserirUsuario(UsuarioDTO objUsuarioDTO) {
+    // Atualizando a consulta SQL para não incluir a data_cadastro
+    String sql = "INSERT INTO usuarios (nome, email, senha, perfil) VALUES (?, ?, ?, ?)";
+    conexao = new ConexaoDAO().conector();
+    
+    try {
+        pst = conexao.prepareStatement(sql);
+        
+        // Remove o parâmetro id_usuario e data_cadastro
+        // pst.setInt(1, objUsuarioDTO.getIdUsuario()); // Não é mais necessário
+        pst.setString(1, objUsuarioDTO.getNomeUsuario());
+        pst.setString(2, objUsuarioDTO.getEmailUsuario());
+        pst.setString(3, objUsuarioDTO.getSenhaUsuario());
+        pst.setString(4, objUsuarioDTO.getPerfilUsuario()); 
+
+        // Executa a inserção
+        pst.executeUpdate(); // Use executeUpdate() para inserções
+        pst.close();
+
+        // Limpa os campos após a inserção, se necessário
+        limpar();
+        
+        JOptionPane.showMessageDialog(null, "Usuário inserido com sucesso!");
+        
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "Inserir Usuário: " + e);
+    }
+}
+
+    
+    //Metodo editar
+    public void editar(UsuarioDTO objUsarioDTO){
+        String sql = "update usuarios set nome = ?, perfil = ?, email = ?, senha = ?, data_cadastro = ? where id_usuario = ?";
+         conexao = ConexaoDAO.conector();
+         try {
+               pst = conexao.prepareStatement(sql);
+               pst.setString(1, objUsarioDTO.getNomeUsuario());
+               pst.setString(2, objUsarioDTO.getPerfilUsuario());
+               pst.setString(3, objUsarioDTO.getEmailUsuario());
+               pst.setString(4, objUsarioDTO.getSenhaUsuario());
+               pst.setString(5, objUsarioDTO.getDataCadastro());
+                pst.setInt(6, objUsarioDTO.getIdUsuario());
+                
+               int add = pst.executeUpdate();
+               if (add >0){
+                   JOptionPane.showMessageDialog(null, "Usuário editado com sucesso!");
+                    //pesquisaAuto();
+                    conexao.close();
+                    limpar();
+               }
+               
+            
+        } catch (Exception e) {
+        JOptionPane.showMessageDialog(null," Método editar " + e);
+        
+        }
+    }
+    
+    //Metodo Excluir
+public void excluir(UsuarioDTO objUsuarioDTO) {
+    String sql = "DELETE FROM usuarios WHERE id_usuario = ?";
+    conexao = new ConexaoDAO().conector();
+    
+    try {
+        pst = conexao.prepareStatement(sql);
+        pst.setInt(1, objUsuarioDTO.getIdUsuario());
+        
+        int linhasAfetadas = pst.executeUpdate(); // Use executeUpdate para operações de DML
+
+        if (linhasAfetadas > 0) {
+            JOptionPane.showMessageDialog(null, "Usuário excluído com sucesso!");
+        } else {
+            JOptionPane.showMessageDialog(null, "Usuário não encontrado!");
+        }
+
+        pst.close();
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "Erro ao excluir usuário: " + e);
+    }
+    limpar();
+}
+
+    
+    //Método para configurar JComboBox
+  
+
+    public List<String> obterPerfis() {
+        List<String> perfis = new ArrayList<>();
+        String sql = "SELECT DISTINCT Perfil FROM Usuarios";
+        
+        try (Connection conn = ConexaoDAO.conector();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                perfis.add(rs.getString("Perfil"));
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Erro ao carregar perfis: " + e.getMessage());
+        }
+        return perfis;
+    }
+
+    //Método para formatar data para Dia-MÊs-Ano
+    public String formatarData(String dataString) {
+    try {
+        // Cria um formato de data que corresponde ao formato da string de entrada
+        SimpleDateFormat formatoEntrada = new SimpleDateFormat("dd/MM/yyyy");
+        // Cria um formato de data que corresponde ao formato desejado
+        SimpleDateFormat formatoSaida = new SimpleDateFormat("yyyy-MM-dd");
+        
+        // Converte a string para uma data
+        Date data = formatoEntrada.parse(dataString);
+        // Retorna a data formatada como uma string no formato correto
+        return formatoSaida.format(data);
+    } catch (Exception e) {
+        e.printStackTrace();
+        return null; // Ou trate o erro de acordo
+    }
+}
+    
+     // Método para obter o perfil de um usuário a partir do banco de dados
+    public String obterPerfilUsuario(int idUsuario) {
+        String perfil = "";
+        String sql = "SELECT Perfil FROM usuarios WHERE id_usuario = ?";
+        
+        try (Connection con = ConexaoDAO.conector();
+             PreparedStatement stmt = con.prepareStatement(sql)) {
+            
+            stmt.setInt(1, idUsuario);
+            ResultSet rs = stmt.executeQuery();
+            
+            if (rs.next()) {
+                perfil = rs.getString("perfil");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return perfil;
+    }
+    
+    
+}
+
 
 ```
